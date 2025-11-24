@@ -22,14 +22,8 @@ export const routes: Routes = [
   { path: 'blog/remove/:id', component: RoutedAdminRemove },
 
   // Vladislav Uski
-  { path: 'visitas', component: VisitasPage,
-    children: [
-      { path: '', component: VisitasPage },
-      // { path: '/new', component:  },
-      // { path: '/edit', component:  },
-      { path: 'dashboard', component: UskiAdminPage },
-    ]
-  }
+  { path: 'visitas', component: VisitasPage},
+  { path: 'visitas/dashboard', component: UskiAdminPage },
 
 ];
 

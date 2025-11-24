@@ -1,0 +1,27 @@
+<div class="card shadow-sm mb-3 border-b-2 rounded-3">
+  <div class="card-body">
+
+    <h5 class="card-title fw-bold mb-1">{{ oVisita.nombre }}</h5>
+
+    <p class="card-text text-muted mt-2">{{ oVisita.comentario }}</p>
+
+    <div class="bg-light rounded p-2 small mt-3">
+      <div class="d-flex align-items-center mb-1">
+        <i class="bi bi-calendar-plus me-2 text-primary"></i>
+        <span>
+          <strong>Fecha de publicación:</strong> {{ oVisita.fechaCreacion }}
+        </span>
+      </div>
+
+      @if (oVisita.fechaModificacion) {
+        <div class="d-flex align-items-center">
+          <i class="bi bi-pencil-square me-2 text-warning"></i>
+          <span>
+            <strong>Última modificación:</strong> {{ oVisita.fechaModificacion }}
+          </span>
+        </div>
+      }
+    </div>
+
+  </div>
+</div>

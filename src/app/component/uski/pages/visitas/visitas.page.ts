@@ -5,18 +5,18 @@ import { Paginacion } from '../../../shared/paginacion/paginacion';
 import { IPage } from '../../types/pageView';
 import { IVisita } from '../../types/visitas';
 import { RouterLink } from "@angular/router";
-import { RegistroCardComponent } from '../../components/registro-card/registro-card.component';
+import { RegistroCardPublicComponent } from '../../components/registro-card-public/registro-card-public.component';
 
 @Component({
   selector: 'app-visitas.page',
-  imports: [Paginacion, RouterLink, RegistroCardComponent],
+  imports: [Paginacion, RouterLink, RegistroCardPublicComponent],
   templateUrl: './visitas.page.html',
   styleUrl: './visitas.page.css',
 })
 export class VisitasPage {
   oPage: IPage<IVisita> | null = null;
   numPage: number = 0;
-  numRpp: number = 2;
+  numRpp: number = 6;
 
   constructor(private oVisitasService: VisitasService) { }
 
@@ -27,7 +27,7 @@ export class VisitasPage {
   }
 
   getPage() {
-    this.oVisitasService.getPage(this.numPage, this.numRpp, 'fechaCreacion', 'desc').subscribe({
+    this.oVisitasService.getPagePublic(this.numPage, this.numRpp, 'fechaCreacion', 'desc').subscribe({
       next: (data: IPage<IVisita>) => {
         this.oPage = data;
         if (this.numPage > 0 && this.numPage >= data.totalPages) {

@@ -12,7 +12,7 @@ export class VisitasService {
 
   constructor(private oHttp: HttpClient) { }
 
-  getPage(page: number, rpp: number, order: string = '', direction: string = ''): Observable<IPage<IVisita>> {
+  getPagePublic(page: number, rpp: number, order: string = '', direction: string = ''): Observable<IPage<IVisita>> {
     if (order === '') {
       order = 'id';
     }
@@ -20,6 +20,16 @@ export class VisitasService {
       direction = 'asc';
     }
     return this.oHttp.get<IPage<IVisita>>(serverURL + `/visitas?page=${page}&size=${rpp}&sort=${order},${direction}`);
+  }
+
+  getPagePrivate(page: number, rpp: number, order: string = '', direction: string = ''): Observable<IPage<IVisita>> {
+    if (order === '') {
+      order = 'id';
+    }
+    if (direction === '') {
+      direction = 'asc';
+    }
+    return this.oHttp.get<IPage<IVisita>>(serverURL + `/visitas/dashboard?page=${page}&size=${rpp}&sort=${order},${direction}`);
   }
 
   get(id: number): Observable<IVisita> {
