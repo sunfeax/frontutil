@@ -17,7 +17,7 @@ import { RegistroTablaComponent } from '../../components/registro-tabla-private/
 export class UskiAdminPage {
   oPage: IPage<IVisita> | null = null;
   numPage: number = 0;
-  numRpp: number = 5;
+  numRpp: number = 10;
 
   constructor(private oVisitasService: VisitasService) { }
 

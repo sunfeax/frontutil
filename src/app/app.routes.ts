@@ -11,6 +11,8 @@ import { UskiVisitasPage } from './component/uski/pages/visitas/visitas.page';
 import { UskiAdminPage } from './component/uski/pages/admin/admin.page';
 import { UskiAdminRemovePage } from './component/uski/pages/admin-remove/admin-remove.page';
 import { UskiAdminViewPage } from './component/uski/pages/admin-view/admin-view.page';
+import { UskiVisitasNewPage } from './component/uski/pages/visitas-new/visitas-new.page';
+import { UskiVisitasViewPage } from './component/uski/pages/visitas-view/visitas-view.page';
 
 
 export const routes: Routes = [
@@ -24,9 +26,13 @@ export const routes: Routes = [
   { path: 'blog/remove/:id', component: RoutedAdminRemove },
 
   // Vladislav Uski
+  // public
   { path: 'visitas', component: UskiVisitasPage},
+  { path: 'visitas/new', component: UskiVisitasNewPage },
+  { path: 'visitas/view/:id', component: UskiVisitasViewPage },
+  // admin
   { path: 'visitas/dashboard', component: UskiAdminPage },
-  { path: 'visitas/view/:id', component: UskiAdminViewPage },
-  { path: 'visitas/remove/:id', component: UskiAdminRemovePage },
+  { path: 'visitas/dashboard/view/:id', component: UskiAdminViewPage },
+  { path: 'visitas/dashboard/remove/:id', component: UskiAdminRemovePage },
 
 ];

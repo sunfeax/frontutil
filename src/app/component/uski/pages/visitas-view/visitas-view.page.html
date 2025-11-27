@@ -1,0 +1,89 @@
+<div class="container py-4 visitas-view">
+  <div class="hero card border-0 shadow-sm mb-4 text-white">
+    <div class="card-body p-4 p-lg-5 position-relative overflow-hidden">
+      <div class="glow"></div>
+      <div class="d-flex flex-wrap align-items-center gap-3 position-relative">
+        <div class="icon-circle bg-white text-primary d-inline-flex align-items-center justify-content-center">
+          <i class="bi bi-chat-left-quote-fill"></i>
+        </div>
+        <div>
+          <div class="text-uppercase small fw-semibold opacity-75">Libro de visitas</div>
+          <h1 class="h4 h3-lg mb-1">Detalle del comentario</h1>
+          <p class="mb-0 opacity-75">Palabras reales de nuestra comunidad.</p>
+        </div>
+        <div class="ms-auto">
+          <a class="btn btn-outline-light btn-sm d-inline-flex align-items-center gap-2" routerLink="/visitas">
+            <i class="bi bi-arrow-left"></i>
+            Volver al listado
+          </a>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  @if (loading) {
+    <div class="text-center py-5">
+      <div class="spinner-border text-primary" role="status">
+        <span class="visually-hidden">Cargando...</span>
+      </div>
+      <p class="text-muted mt-3 mb-0">Cargando detalle...</p>
+    </div>
+  }
+
+  @if (error) {
+    <div class="alert alert-danger d-flex align-items-center gap-2" role="alert">
+      <i class="bi bi-exclamation-triangle-fill"></i>
+      <span>{{ error }}</span>
+    </div>
+  }
+
+  @if (!loading && !error && oVisita) {
+    <div class="row g-4 justify-content-center">
+      <div class="col-lg-10 col-xl-8">
+        <div class="card shadow-lg border-0 h-100">
+          <div class="card-body p-4 p-lg-5 d-flex flex-column gap-3">
+            <div class="d-flex align-items-start gap-3 flex-wrap">
+              <div class="avatar bg-primary-subtle text-primary d-inline-flex align-items-center justify-content-center">
+                <span class="fw-bold">{{ oVisita.nombre.slice(0, 1) }}</span>
+              </div>
+              <div class="flex-grow-2">
+                <div class="d-flex align-items-center gap-2 flex-wrap">
+                  <h2 class="h4 mb-0">{{ oVisita.nombre }}</h2>
+                  @if (oVisita.estaPublicado) {
+                    <span class="badge bg-success-subtle text-success d-inline-flex align-items-center gap-1">
+                      <i class="bi bi-check-circle"></i> Publicado
+                    </span>
+                  } @else {
+                    <span class="badge bg-secondary-subtle text-secondary d-inline-flex align-items-center gap-1">
+                      <i class="bi bi-eye-slash"></i> Oculto
+                    </span>
+                  }
+                </div>
+              </div>
+            </div>
+
+            <div class="quote-box p-4 rounded-4 border bg-light">
+              <div class="d-flex align-items-center gap-2 mb-2 text-primary">
+                <i class="bi bi-quote fs-4"></i>
+                <span class="fw-semibold">Comentario</span>
+              </div>
+              <p class="lead mb-0">{{ oVisita.comentario }}</p>
+            </div>
+
+            <div class="row g-3 align-items-stretch mt-auto">
+              <div class="col-sm-6 col-md-5 col-lg-6">
+                <div class="detail-tile shadow-sm rounded-4 p-3 h-100">
+                  <div class="text-muted small mb-1">Publicado</div>
+                  <div class="d-flex align-items-center gap-2">
+                    <i class="bi bi-calendar-event text-primary"></i>
+                    <span>{{ oVisita.fechaCreacion | datetime }}</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  }
+</div>

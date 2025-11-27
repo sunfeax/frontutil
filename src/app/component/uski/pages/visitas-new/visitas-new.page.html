@@ -1,0 +1,88 @@
+<div class="container my-4 new-form">
+  <div class="row justify-content-center">
+    <div class="col-12 col-lg-8">
+      <div class="form-card">
+        <header class="form-header mb-4">
+          <h1 class="form-title">Dejar una nueva reseña</h1>
+          <p class="text-muted small">Completa los campos para enviar un nuevo comentario</p>
+        </header>
+
+        @if (error) {
+        <div class="alert alert-danger" role="alert">
+          <i class="bi bi-exclamation-triangle me-2"></i>{{ error }}
+        </div>
+        }
+
+        <form [formGroup]="visitaForm" (ngSubmit)="onSubmit()" novalidate>
+          <div class="mb-4">
+            <label for="nombre" class="form-label">Nombre <span class="text-danger">*</span></label>
+            <input
+              type="text"
+              class="form-control"
+              [class.is-invalid]="nombre?.invalid && nombre?.touched"
+              [class.is-valid]="nombre?.valid && nombre?.touched"
+              id="nombre"
+              formControlName="nombre"
+              placeholder="Introduce su nombre completo"
+            />
+            @if (nombre?.invalid && nombre?.touched) {
+            <div class="invalid-feedback">
+              @if (nombre?.errors?.['required']) {
+                <span>El nombre es obligatorio.</span>
+              }
+              @if (nombre?.errors?.['minlength']) {
+                <span>El nombre debe tener al menos 3 caracteres.</span>
+              }
+              @if (nombre?.errors?.['maxlength']) {
+                <span>El nombre no puede superar 255 caracteres.</span>
+              }
+            </div>
+            }
+          </div>
+
+          <div class="mb-4">
+            <label for="comentario" class="form-label">Comentario <span class="text-danger">*</span></label>
+            <textarea
+              class="form-control"
+              [class.is-invalid]="comentario?.invalid && comentario?.touched"
+              [class.is-valid]="comentario?.valid && comentario?.touched"
+              id="comentario"
+              formControlName="comentario"
+              rows="8"
+              placeholder="Deje su opinión sobre su visita"
+            ></textarea>
+            @if (comentario?.invalid && comentario?.touched) {
+            <div class="invalid-feedback">
+              @if (comentario?.errors?.['required']) {
+                <span>El comentario es obligatorio.</span>
+              }
+              @if (comentario?.errors?.['minlength']) {
+                <span>El comentario debe tener al menos 25 caracteres.</span>
+              }
+            </div>
+            }
+          </div>
+
+          <div class="d-flex justify-content-between align-items-center mt-4">
+            <a [routerLink]="['/visitas']" class="btn btn-outline-secondary">
+              <i class="bi bi-arrow-left me-2"></i>Cancelar
+            </a>
+            <button
+              type="submit"
+              class="btn btn-success"
+              [disabled]="submitting || visitaForm.invalid"
+            >
+              @if (submitting) {
+                <span class="spinner-border spinner-border-sm me-2" role="status" aria-hidden="true"></span>
+              }
+              @if (!submitting) {
+                <i class="bi bi-plus-circle me-2"></i>
+              }
+              Dejar reseña
+            </button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
