@@ -40,4 +40,7 @@ export class VisitasService {
     return this.oHttp.delete<number>(serverURL + '/visitas/' + id);
   }
 
+  rellenaBlog(numPosts: number): Observable<number> {
+    return this.oHttp.get<number>(serverURL + '/visitas/rellena/' + numPosts);
+  }
 }
