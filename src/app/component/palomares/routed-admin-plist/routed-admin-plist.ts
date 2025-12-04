@@ -7,6 +7,7 @@ import { PalomaresService } from '../../../service/palomares';
 import { Paginacion } from "../../shared/paginacion/paginacion";
 import { BotoneraRpp } from "../../shared/botonera-rpp/botonera-rpp";
 import { DatetimePipe } from "../../../pipe/datetime-pipe";
+import { debug } from '../../../environment/environment';
 
 @Component({
   selector: 'app-routed-admin-plist',
@@ -21,10 +22,11 @@ export class RoutedAdminPlist {
   rellenaCantidad: number = 10;
   rellenando: boolean = false;
   rellenaOk: number | null = null;
-  rellenaError: string | null = null;
+  rellenaError: string | null = null; 
+  debugging: boolean = debug; 
 
   constructor(private oPalomaresService: PalomaresService) {
-    console.log('RoutedAdminPlist - Constructor inicializado');
+    this.debugging && console.log('RoutedAdminPlist - Constructor inicializado');
   }
 
   oBotonera: string[] = [];
@@ -34,18 +36,18 @@ export class RoutedAdminPlist {
   }
 
   getPage() {
-    console.log('Llamando a getPage - Página:', this.numPage, 'RPP:', this.numRpp);
+    this.debugging && console.log('Llamando a getPage - Página:', this.numPage, 'RPP:', this.numRpp);
     this.oPalomaresService.getPage(this.numPage, this.numRpp).subscribe({
       next: (data: IPage<IPalomares>) => {
-        console.log('✅ Datos recibidos del servidor:', data);
-        console.log('📊 Estructura de data:', {
+        this.debugging && console.log('✅ Datos recibidos del servidor:', data);
+        this.debugging && console.log('📊 Estructura de data:', {
           content: data.content,
           totalElements: data.totalElements,
           totalPages: data.totalPages,
           number: data.number
         });
-        console.log('📝 Contenido del array:', data.content);
-        console.log('📏 Longitud del array content:', data.content?.length);
+        this.debugging && console.log('📝 Contenido del array:', data.content);
+        this.debugging && console.log('📏 Longitud del array content:', data.content?.length);
         
         this.oPage = data;
         this.rellenaOk = this.oPage.totalElements;
@@ -57,10 +59,10 @@ export class RoutedAdminPlist {
         }
       },
       error: (error: HttpErrorResponse) => {
-        console.error('❌ Error al cargar datos:', error);
-        console.error('Status:', error.status);
-        console.error('Message:', error.message);
-        console.error('Error completo:', error);
+        this.debugging && console.error('❌ Error al cargar datos:', error);
+        this.debugging && console.error('Status:', error.status);
+        this.debugging && console.error('Message:', error.message);
+        this.debugging && console.error('Error completo:', error);
       },
     });
   }
@@ -95,7 +97,7 @@ export class RoutedAdminPlist {
       error: (err: HttpErrorResponse) => {
         this.rellenando = false;
         this.rellenaError = 'Error generando datos fake';
-        console.error(err);
+        this.debugging && console.error(err);
       }
     });
   }

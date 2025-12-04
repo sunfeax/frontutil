@@ -65,17 +65,17 @@
     <app-botonera-rpp [numRpp]="numRpp" (rppChange)="onRppChange($event)"> </app-botonera-rpp>
   </div>
 
+  @if (oPage && debugging) {
   <!-- DEBUG INFO -->
   <div class="alert alert-info my-2">
-    <strong>🔍 Debug Info:</strong><br>
-    oPage existe: {{ oPage ? 'Sí' : 'No' }}<br>
-    @if (oPage) {
-      Total elementos: {{ oPage.totalElements }}<br>
-      Total páginas: {{ oPage.totalPages }}<br>
-      Elementos en content: {{ oPage.content.length }}<br>
-      Content es array: {{ oPage.content ? 'Sí' : 'No' }}
-    }
+    <strong>🔍 Debug Info:</strong><br />
+    oPage existe: {{ oPage ? 'Sí' : 'No' }}<br />
+    Total elementos: {{ oPage.totalElements }}<br />
+    Total páginas: {{ oPage.totalPages }}<br />
+    Elementos en content: {{ oPage.content.length }}<br />
+    Content es array: {{ oPage.content ? 'Sí' : 'No' }}
   </div>
+  }
 
   <div class="d-flex justify-content-center">
     <table class="table table-striped table-bordered">
@@ -96,19 +96,21 @@
         <tr>
           <th scope="row">{{ oPalomares.id }}</th>
           <td>{{ oPalomares.titulo }}</td>
-          <td><span class="badge bg-info">{{ oPalomares.categoria }}</span></td>
+          <td>
+            <span class="badge bg-info">{{ oPalomares.categoria }}</span>
+          </td>
           <td>
             @if (oPalomares.completada) {
-              <span class="badge bg-success"><i class="bi bi-check-circle me-1"></i>Sí</span>
+            <span class="badge bg-success"><i class="bi bi-check-circle me-1"></i>Sí</span>
             } @else {
-              <span class="badge bg-warning"><i class="bi bi-clock me-1"></i>Pendiente</span>
+            <span class="badge bg-warning"><i class="bi bi-clock me-1"></i>Pendiente</span>
             }
           </td>
           <td>
             @if (oPalomares.publicado) {
-              <span class="badge bg-success">Sí</span>
+            <span class="badge bg-success">Sí</span>
             } @else {
-              <span class="badge bg-secondary">No</span>
+            <span class="badge bg-secondary">No</span>
             }
           </td>
           <td>{{ oPalomares.fechaCreacion | datetime }}</td>
@@ -118,7 +120,10 @@
               <a [routerLink]="['/palomares/view', oPalomares.id]" class="btn btn-outline-primary">
                 <i class="bi bi-eye"></i>
               </a>
-              <a [routerLink]="['/palomares/edit', oPalomares.id]" class="btn btn-outline-secondary">
+              <a
+                [routerLink]="['/palomares/edit', oPalomares.id]"
+                class="btn btn-outline-secondary"
+              >
                 <i class="bi bi-pencil-square"></i>
               </a>
               <a [routerLink]="['/palomares/remove', oPalomares.id]" class="btn btn-outline-danger">

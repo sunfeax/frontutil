@@ -1,6 +1,6 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { serverURL } from '../environment/environment';
+import { debug, serverURL } from '../environment/environment';
 import { IPage } from '../model/plist';
 import { IPalomares } from '../model/palomares';
 import { Observable } from 'rxjs';
@@ -9,6 +9,8 @@ import { Observable } from 'rxjs';
   providedIn: 'root',
 })
 export class PalomaresService {
+
+  debugging: boolean = debug;
 
   constructor(private oHttp: HttpClient) { }
 
@@ -20,7 +22,7 @@ export class PalomaresService {
       direction = 'asc';
     }
     const url = serverURL + `/Ian?page=${page}&size=${rpp}&sort=${order},${direction}`;
-    console.log('PalomaresService - Llamando a:', url);
+    this.debugging && console.log('PalomaresService - Llamando a:', url);
     return this.oHttp.get<IPage<IPalomares>>(url);
   }
 
@@ -30,8 +32,8 @@ export class PalomaresService {
 
   create(palomares: Partial<IPalomares>): Observable<IPalomares> {
     const url = serverURL + '/Ian';
-    console.log('PalomaresService - Creando tarea en:', url);
-    console.log('Datos a enviar:', palomares);
+    this.debugging && console.log('PalomaresService - Creando tarea en:', url);
+    this.debugging && console.log('Datos a enviar:', palomares);
     return this.oHttp.post<IPalomares>(url, palomares);
   }
 
