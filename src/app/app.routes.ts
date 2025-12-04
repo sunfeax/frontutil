@@ -1,5 +1,8 @@
 import { Routes } from '@angular/router';
 import { Home } from './component/shared/home/home';
+
+import { LoginComponent } from './component/shared/login/login.component'
+
 import { RoutedAdminPlist } from './component/blog/routed-admin-plist/routed-admin-plist';
 import { RoutedAdminView } from './component/blog/routed-admin-view/routed-admin-view';
 import { RoutedUserPlist } from './component/blog/routed-user-plist/routed-user-plist';
@@ -161,6 +164,8 @@ export const routes: Routes = [
   { path: 'silvestre/new', component: RoutedAdminNewSilvestre },
   { path: 'silvestre/edit/:id', component: RoutedAdminEditSilvestre },
   { path: 'silvestre/remove/:id', component: RoutedAdminRemoveSilvestre },
+
+  { path: 'login', component: LoginComponent },
 
   // Vladislav Uski
   // public
