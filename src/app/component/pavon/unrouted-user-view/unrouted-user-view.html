@@ -1,0 +1,43 @@
+<div class="container m-5 recurso-view">
+  <article class="recurso-card p-5 border rounded shadow-sm">
+    <header class="recurso-header my-5">
+      <h1 class="recurso-title">{{ oRecurso?.nombre }}</h1>
+    </header>
+
+    <section class="recurso-content my-5">
+      <!-- icono de enlace -->
+      <i class="bi bi-link-45deg"></i>
+      <p>
+        <a [href]="oRecurso?.url" target="_blank">{{ oRecurso?.url }}</a>
+      </p>
+    </section>
+
+    <footer class="recurso-footer my-5 d-flex justify-content-between align-items-center">
+      <div class="recurso-meta text-muted small">
+        <span class="me-3">
+          <i class="bi bi-calendar3"></i>
+          Creado el
+          {{ oRecurso?.fechaCreacion | datetime : 'solofechacompleta' }} a las
+          {{ oRecurso?.fechaCreacion | datetime : 'solohora' }}
+        </span>
+        @if (oRecurso?.fechaModificacion) {
+        <span class="me-3">
+          <i class="bi bi-clock"></i>
+          Modificado el 
+          {{ oRecurso?.fechaModificacion | datetime : 'solofechacompleta' }} a las
+          {{ oRecurso?.fechaModificacion | datetime : 'solohora' }}
+        </span>
+        }
+      </div>
+      <div class="recurso-meta text-muted small">
+        <span class="public-badge">
+          @if (oRecurso?.publico) {
+            <i class="bi bi-eye"></i> Público
+          } @else {
+            <i class="bi bi-eye-slash"></i> Privado
+          }
+        </span>
+      </div>
+    </footer>
+  </article>
+</div>

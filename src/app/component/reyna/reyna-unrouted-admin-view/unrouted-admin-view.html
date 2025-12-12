@@ -1,0 +1,42 @@
+<!-- crear la tabla con oReyna -->
+<div class="container my-4 edit-form">
+  <div class="row justify-content-center">
+    <div class="col-12 col-lg-8">
+      <div class="form-card">
+        <h1 class="my-5">Detalle de Frase Motivacional</h1>
+
+        <table class="table">
+          <thead>
+            <tr>
+              <th scope="col">ID</th>
+              <th scope="row">{{ oReyna?.id }}</th>
+            </tr>
+            <tr>
+              <th scope="col">Frase</th>
+              <td>{{ oReyna?.frase }}</td>
+            </tr>
+            <tr>
+              <th scope="col">Autor</th>
+              <td>{{ oReyna?.autor }}</td>
+            </tr>
+            <tr>
+              <th scope="col">Es Pública</th>
+              <td>{{ oReyna?.esPublica ? 'Sí' : 'No' }}</td>
+            </tr>
+            <tr>
+              <th scope="col">Fecha Creación</th>
+              <td>{{ oReyna?.fechaCreacion | datetime }}</td>
+            </tr>
+            <tr>
+              <th scope="col">Fecha Modificación</th>
+              <td>{{ oReyna?.fechaModificacion | datetime }}</td>
+            </tr>
+          </thead>
+        </table>
+        <a [routerLink]="['/reyna/plist']" class="btn btn-outline-secondary">
+          <i class="bi bi-arrow-left me-2"></i>Volver a la lista
+        </a>  
+      </div>
+    </div>
+  </div>
+</div>

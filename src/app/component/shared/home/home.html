@@ -1,95 +1,641 @@
 <div class="container my-5">
-	<div class="text-center mb-4">
-		<h1 class="h3">Bienvenidos a las utilidades personales de DAWsiàs</h1>
-		<p class="text-muted">Panel de acceso rápido a las herramientas y utilidades disponibles.</p>
-	</div>
+  <div class="text-center mb-4">
+    <h1 class="h3">Bienvenidos a las utilidades personales de DAWsiàs</h1>
+    <p class="text-muted">Panel de acceso rápido a las herramientas y utilidades disponibles.</p>
+  </div>
 
-	<div class="row g-3">
-		<!-- Blog Card -->
-		<div class="col-12 col-sm-6 col-lg-4">
-			<div class="card h-100 shadow-lg border-1">
-				<div class="card-body d-flex flex-column">
-					<div class="d-flex align-items-center mb-3">
-						<div class="icon bg-primary text-white rounded-circle d-flex align-items-center justify-content-center me-3" style="width:48px;height:48px;">
-							<i class="bi bi-journal-text fs-5"></i>
-						</div>
-						<div>
-							<h5 class="card-title mb-0">Blog</h5>
-							<small class="text-muted">Accede a mi blog personal</small>
-						</div>
-					</div>
-					<p class="card-text text-secondary small flex-grow-1">Explora las ideas, ocurrencias y comentarios de actualidad que publico cada cierto tiempo. Espero que te gusten.</p>
-					<div class="mt-3 d-flex gap-2">
-						<a class="btn btn-outline-primary btn-sm" [routerLink]="['/blog']"><i class="bi bi-eye me-2"></i>Ver blog</a>
-						<a class="btn btn-warning btn-sm" [routerLink]="['/blog/plist']"><i class="bi bi-gear-fill me-2"></i>Administrar</a>
-					</div>
-				</div>
-			</div>
-		</div>
-
-		<!-- Placeholder for additional utility cards -->
-		<div class="col-12 col-sm-6 col-lg-4">
-			<div class="card h-100 shadow-lg border-1">
-				<div class="card-body d-flex flex-column">
-					<div class="d-flex align-items-center mb-3">
-						<div class="icon bg-secondary text-white rounded-circle d-flex align-items-center justify-content-center me-3" style="width:48px;height:48px;">
-							<i class="bi bi-tools fs-5"></i>
-						</div>
-						<div>
-							<h5 class="card-title mb-0">Utilidad X</h5>
-							<small class="text-muted">Descripción breve</small>
-						</div>
-					</div>
-					<p class="card-text text-secondary small flex-grow-1">Espacio para añadir nuevas utilidades personales. Añade descripción y botón de acceso.</p>
-					<div class="mt-3 d-flex gap-2">
-						<a class="btn btn-outline-primary btn-sm" disabled><i class="bi bi-eye me-2"></i>Acceder</a>
-						<a class="btn btn-warning btn-sm" disabled><i class="bi bi-gear-fill me-2"></i>Administrar</a>
-					</div>
-				</div>
-			</div>
-		</div>
-
-		<div class="col-12 col-sm-6 col-lg-4">
-			<div class="card h-100 shadow-lg border-1">
-				<div class="card-body d-flex flex-column">
-					<div class="d-flex align-items-center mb-3">
-						<div class="icon bg-success text-white rounded-circle d-flex align-items-center justify-content-center me-3" style="width:48px;height:48px;">
-							<i class="bi bi-calendar2-event fs-5"></i>
-						</div>
-						<div>
-							<h5 class="card-title mb-0">Utilidad Y</h5>
-							<small class="text-muted">Descripción breve</small>
-						</div>
-					</div>
-					<p class="card-text text-secondary small flex-grow-1">Espacio para añadir nuevas utilidades personales. Añade descripción y botón de acceso.</p>
-					<div class="mt-3 d-flex gap-2">
-						<a class="btn btn-outline-primary btn-sm" disabled><i class="bi bi-eye me-2"></i>Acceder</a>
-						<a class="btn btn-warning btn-sm" disabled><i class="bi bi-gear-fill me-2"></i>Administrar</a>
-					</div>
-				</div>
-			</div>
-		</div>
+  <div class="row g-3">
+    <!-- Blog Card -->
+    <div class="col-12 col-sm-6 col-lg-4">
+      <div class="card h-100 shadow-lg border-1">
+        <div class="card-body d-flex flex-column">
+          <div class="d-flex align-items-center mb-3">
+            <div
+              class="icon bg-primary text-white rounded-circle d-flex align-items-center justify-content-center me-3"
+              style="width: 48px; height: 48px"
+            >
+              <i class="bi bi-journal-text fs-5"></i>
+            </div>
+            <div>
+              <h5 class="card-title mb-0">Blog</h5>
+              <small class="text-muted">Accede a mi blog personal</small>
+            </div>
+          </div>
+          <p class="card-text text-secondary small flex-grow-1">
+            Explora las ideas, ocurrencias y comentarios de actualidad que publico cada cierto
+            tiempo. Espero que te gusten.
+          </p>
+          <small class="text-muted text-end"><i class="bi bi-person me-2"></i>Rafael Aznar</small>
+          <div class="mt-3 d-flex gap-2">
+            <a class="btn btn-outline-primary btn-sm" [routerLink]="['/blog']"
+              ><i class="bi bi-eye me-2"></i>Ver blog</a
+            >
+            <a class="btn btn-warning btn-sm" [routerLink]="['/blog/plist']"
+              ><i class="bi bi-gear-fill me-2"></i>Administrar</a
+            >
+          </div>
+        </div>
+      </div>
+    </div>
 
     <div class="col-12 col-sm-6 col-lg-4">
-			<div class="card h-100 shadow-lg border-1">
-				<div class="card-body d-flex flex-column">
-					<div class="d-flex align-items-center mb-3">
-						<div class="icon bg-secondary text-white rounded-circle d-flex align-items-center justify-content-center me-3" style="width:48px;height:48px;">
-							<i class="bi bi-pencil-square fs-5"></i>
-						</div>
-						<div>
-							<h5 class="card-title mb-0">Libro de visitas</h5>
-							<small class="text-muted">Vladislav Uski</small>
-						</div>
-					</div>
-					<p class="card-text text-secondary small flex-grow-1">Comparte tu experiencia con nosotros. Tus comentarios son fundamentales para seguir creciendo.</p>
-					<div class="mt-3 d-flex gap-2">
-						<a class="btn btn-outline-primary btn-sm" [routerLink]="['/visitas']"><i class="bi bi-eye me-2"></i>Acceder</a>
-						<a class="btn btn-warning btn-sm" [routerLink]="['/visitas/dashboard']"><i class="bi bi-gear-fill me-2"></i>Administrar</a>
-					</div>
-				</div>
-			</div>
-		</div>
+      <div class="card h-100 shadow-lg border-1">
+        <div class="card-body d-flex flex-column">
+          <div class="d-flex align-items-center mb-3">
+            <div
+              class="icon bg-success text-white rounded-circle d-flex align-items-center justify-content-center me-3"
+              style="width: 48px; height: 48px"
+            >
+              <i class="bi bi-calendar2-event fs-5"></i>
+            </div>
+            <div>
+              <h5 class="card-title mb-0">Recurso</h5>
+              <small class="text-muted">Accede a mi colección de recursos.</small>
+            </div>
+          </div>
+          <p class="card-text text-secondary small flex-grow-1">
+            He aquí una colección de los recursos web favoritos de la gente, puedes consultar y
+            añadir los tuyos propios.
+          </p>
+          <small class="text-muted text-end"><i class="bi bi-person me-2"></i>Alejandro Pavón</small>
+          <div class="mt-3 d-flex gap-2">
+            <a class="btn btn-outline-primary btn-sm" [routerLink]="['/recurso']"
+              ><i class="bi bi-eye me-2"></i>Ver recursos web</a
+            >
+            <a class="btn btn-warning btn-sm" [routerLink]="['/recurso/plist']"
+              ><i class="bi bi-gear-fill me-2"></i>Administrar</a
+            >
+          </div>
+        </div>
+      </div>
+    </div>
 
-	</div>
+    <div class="col-12 col-sm-6 col-lg-4">
+      <div class="card h-100 shadow-lg border-1">
+        <div class="card-body d-flex flex-column">
+          <div class="d-flex align-items-center mb-3">
+            <div
+              class="icon bg-danger text-white rounded-circle d-flex align-items-center justify-content-center me-3"
+              style="width: 48px; height: 48px"
+            >
+              <svg
+                width="22"
+                height="22"
+                viewBox="0 0 24 24"
+                fill="none"
+                xmlns="http://www.w3.org/2000/svg"
+                role="img"
+                aria-label="Flor"
+              >
+                <circle cx="12" cy="12" r="2" fill="currentColor" />
+                <circle cx="12" cy="5" r="2.5" fill="currentColor" />
+                <circle cx="12" cy="19" r="2.5" fill="currentColor" />
+                <circle cx="5" cy="12" r="2.5" fill="currentColor" />
+                <circle cx="19" cy="12" r="2.5" fill="currentColor" />
+              </svg>
+            </div>
+            <div>
+              <h5 class="card-title mb-0">Gallery</h5>
+              <small class="text-muted">Accede a la galería de imágenes</small>
+            </div>
+          </div>
+          <p class="card-text text-secondary small flex-grow-1">
+            Invesiga y explora la colección de imágenes que se ha construido con ilusión.
+          </p>
+          <small class="text-muted text-end"><i class="bi bi-person me-2"></i>Ana Silvestre</small>
+          <div class="mt-3 d-flex gap-2">
+            <a class="btn btn-outline-primary btn-sm" [routerLink]="['/silvestre']"
+              ><i class="bi bi-eye me-2"></i>Ver galería</a
+            >
+            <a class="btn btn-warning btn-sm" [routerLink]="['/silvestre/plist']"
+              ><i class="bi bi-gear-fill me-2"></i>Administrar</a
+            >
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="col-12 col-sm-6 col-lg-4">
+      <div class="card h-100 shadow-lg border-1">
+        <div class="card-body d-flex flex-column">
+          <div class="d-flex align-items-center mb-3">
+            <div
+              class="icon bg-secondary text-white rounded-circle d-flex align-items-center justify-content-center me-3"
+              style="width: 48px; height: 48px"
+            >
+              <i class="bi bi-pencil-square fs-5"></i>
+            </div>
+            <div>
+              <h5 class="card-title mb-0">Libro de visitas</h5>
+              <small class="text-muted">Mi libro de visitas personal</small>
+            </div>
+          </div>
+          <p class="card-text text-secondary small flex-grow-1">
+            Comparte tu experiencia con nosotros. Tus comentarios son fundamentales para seguir
+            creciendo.
+          </p>
+          <small class="text-muted text-end"><i class="bi bi-person me-2"></i>Vladislav Uski</small>
+          <div class="mt-3 d-flex gap-2">
+            <a class="btn btn-outline-primary btn-sm" [routerLink]="['/visitas']"
+              ><i class="bi bi-eye me-2"></i>Acceder</a
+            >
+            <a class="btn btn-warning btn-sm" [routerLink]="['/visitas/dashboard']"
+              ><i class="bi bi-gear-fill me-2"></i>Administrar</a
+            >
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Placeholder for additional utility cards -->
+    <div class="col-12 col-sm-6 col-lg-4">
+      <div class="card h-100 shadow-lg border-1">
+        <div class="card-body d-flex flex-column">
+          <div class="d-flex align-items-center mb-3">
+            <div
+              class="icon bg-success text-white rounded-circle d-flex align-items-center justify-content-center me-3"
+              style="width: 48px; height: 48px"
+            >
+              <i class="bi bi-cart-check fs-5"></i>
+            </div>
+            <div>
+              <h5 class="card-title mb-0">Lista de Compra</h5>
+              <small class="text-muted">Mi lista de compra personal</small>
+            </div>
+          </div>
+          <p class="card-text text-secondary small flex-grow-1">
+            Gestiona tu lista de compra con fechas esperadas, contenido detallado y estado de
+            publicación. Organiza tus compras de forma eficiente.
+          </p>
+          <small class="text-muted text-end"><i class="bi bi-person me-2"></i>DG Calinescu</small>
+          <div class="mt-3 d-flex gap-2">
+            <a class="btn btn-outline-primary btn-sm" [routerLink]="['/calinescu']"
+              ><i class="bi bi-eye me-2"></i>Ver lista</a
+            >
+            <a class="btn btn-warning btn-sm" [routerLink]="['/calinescu/plist']"
+              ><i class="bi bi-gear-fill me-2"></i>Administrar</a
+            >
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Frases Motivacionales Card -->
+    <div class="col-12 col-sm-6 col-lg-4">
+      <div class="card h-100 shadow-lg border">
+        <div class="card-body d-flex flex-column">
+          <div class="d-flex align-items-center mb-3">
+            <div
+              class="icon bg-info text-white rounded-circle d-flex align-items-center justify-content-center me-3"
+              style="width: 48px; height: 48px"
+            >
+              <i class="bi bi-chat-quote fs-5"></i>
+            </div>
+            <div>
+              <h5 class="card-title mb-0">Frases Motivacionales</h5>
+              <small class="text-muted">Inspiración y motivación diaria</small>
+            </div>
+          </div>
+          <p class="card-text text-secondary small flex-grow">
+            Descubre frases inspiradoras y motivacionales de grandes autores. Un espacio para la
+            reflexión y el crecimiento personal.
+          </p>
+          <small class="text-muted text-end"><i class="bi bi-person me-2"></i>RA Reyna</small>
+          <div class="mt-3 d-flex gap-2">
+            <a class="btn btn-outline-primary btn-sm" [routerLink]="['/reyna']"
+              ><i class="bi bi-eye me-2"></i>Ver frases</a
+            >
+            <a class="btn btn-warning btn-sm" [routerLink]="['/reyna/plist']"
+              ><i class="bi bi-gear-fill me-2"></i>Administrar</a
+            >
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Blog Card -->
+    <div class="col-12 col-sm-6 col-lg-4">
+      <div class="card h-100 shadow-lg border-1">
+        <div class="card-body d-flex flex-column">
+          <div class="d-flex align-items-center mb-3">
+            <div
+              class="icon bg-danger text-white rounded-circle d-flex align-items-center justify-content-center me-3"
+              style="width: 48px; height: 48px"
+            >
+              <i class="bi bi-journal-text fs-5"></i>
+            </div>
+            <div>
+              <h5 class="card-title mb-0">Objetivos</h5>
+              <small class="text-muted">Mis metas personales</small>
+            </div>
+          </div>
+          <p class="card-text text-secondary small flex-grow-1">
+            ¡Apunta en una lista tus objetivos o metas a cumplir! No te olvides que con esfuerzo
+            todo se puede.
+          </p>
+          <small class="text-muted text-end"><i class="bi bi-person me-2"></i>Olga García</small>
+          <div class="mt-3 d-flex gap-2">
+            <a class="btn btn-outline-primary btn-sm" [routerLink]="['/garcia']"
+              ><i class="bi bi-eye me-2"></i>Acceder</a
+            >
+            <a class="btn btn-warning btn-sm" [routerLink]="['/garcia/plist']"
+              ><i class="bi bi-gear-fill me-2"></i>Administrar</a
+            >
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- castanyera Journal cards -->
+    <div class="col-12 col-sm-6 col-lg-4">
+      <div class="card h-100 shadow-lg border-1">
+        <div class="card-body d-flex flex-column">
+          <div class="d-flex align-items-center mb-3">
+            <div
+              class="icon bg-danger text-white rounded-circle d-flex align-items-center justify-content-center me-3"
+              style="width: 48px; height: 48px"
+            >
+              <i class="bi bi-bluesky fs-5"></i>
+            </div>
+            <div>
+              <h5 class="card-title mb-0">Journal</h5>
+              <small class="text-muted">Mis viajes</small>
+            </div>
+          </div>
+          <p class="card-text text-secondary small flex-grow-1">
+            ¡Puedes entrar y leer sobre los diferentes viajes realizados por el admin!
+          </p>
+          <small class="text-muted text-end"><i class="bi bi-person me-2"></i>Lucía Castañera</small>
+          <div class="mt-3 d-flex gap-2">
+            <a class="btn btn-outline-primary btn-sm" [routerLink]="['/castanyera']"
+              ><i class="bi bi-eye me-2"></i>Ver journal</a
+            >
+            <a class="btn btn-warning btn-sm" [routerLink]="['/castanyera/plist']"
+              ><i class="bi bi-gear-fill me-2"></i>Administrar</a
+            >
+          </div>
+        </div>
+      </div>
+    </div>
+
+
+    <!-- Palomares - Gestor de Tareas -->
+    <div class="col-12 col-sm-6 col-lg-4">
+      <div class="card h-100 shadow-lg border-1">
+        <div class="card-body d-flex flex-column">
+          <div class="d-flex align-items-center mb-3">
+            <div
+              class="icon bg-success text-white rounded-circle d-flex align-items-center justify-content-center me-3"
+              style="width: 48px; height: 48px"
+            >
+              <i class="bi bi-list-check fs-5"></i>
+            </div>
+            <div>
+              <h5 class="card-title mb-0">Gestor de Tareas</h5>
+              <small class="text-muted">To-Do List con categorías</small>
+            </div>
+          </div>
+          <p class="card-text text-secondary small flex-grow-1">
+            Organiza tus tareas pendientes por categorías. Crea, edita y marca tareas como
+            completadas de forma sencilla.
+          </p>
+          <small class="text-muted text-end"><i class="bi bi-person me-2"></i>Ian Palomares</small>
+          <div class="mt-3 d-flex gap-2">
+            <a class="btn btn-outline-primary btn-sm" [routerLink]="['/palomares']"
+              ><i class="bi bi-eye me-2"></i>Ver tareas</a
+            >
+            <a class="btn btn-warning btn-sm" [routerLink]="['/palomares/plist']"
+              ><i class="bi bi-gear-fill me-2"></i>Administrar</a
+            >
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Encuesta Alfonso -->
+    <div class="col-12 col-sm-6 col-lg-4">
+      <div class="card h-100 shadow-lg border-1">
+        <div class="card-body d-flex flex-column">
+          <div class="d-flex align-items-center mb-3">
+            <div
+              class="icon bg-info text-white rounded-circle d-flex align-items-center justify-content-center me-3"
+              style="width: 48px; height: 48px"
+            >
+              <i class="bi bi-chat-dots fs-5"></i>
+            </div>
+            <div>
+              <h5 class="card-title mb-0">Mi encuesta de una sóla pregunta</h5>
+              <small class="text-muted">Espero tu respuesta libre</small>
+            </div>
+          </div>
+          <p class="card-text text-secondary small flex-grow-1">
+            Consulta y responde a la pregunta abierta. Incluye vista p&uacute;blica y mantenimiento
+            completo.
+          </p>
+          <small class="text-muted text-end"><i class="bi bi-person me-2"></i>Ivan Alfonso</small>
+          <div class="mt-3 d-flex gap-2">
+            <a class="btn btn-outline-info btn-sm" [routerLink]="['/alfonso']"
+              ><i class="bi bi-eye me-2"></i>Ver respuestas</a
+            >
+            <a class="btn btn-warning btn-sm" [routerLink]="['/alfonso/plist']"
+              ><i class="bi bi-gear-fill me-2"></i>Administrar</a
+            >
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Fernandez Ideas Card -->
+    <div class="col-12 col-sm-6 col-lg-4">
+      <div class="card h-100 shadow-lg border-1">
+        <div class="card-body d-flex flex-column">
+          <div class="d-flex align-items-center mb-3">
+            <div
+              class="icon bg-info text-white rounded-circle d-flex align-items-center justify-content-center me-3"
+              style="width: 48px; height: 48px"
+            >
+              <i class="bi bi-lightbulb fs-5"></i>
+            </div>
+            <div>
+              <h5 class="card-title mb-0">Ideas</h5>
+              <small class="text-muted">Mi sistema de gestión de ideas</small>
+            </div>
+          </div>
+          <p class="card-text text-secondary small flex-grow-1">
+            Gestiona ideas, mejoras y bugs. Comparte tus pensamientos con la comunidad o mantén tus
+            notas privadas.
+          </p>
+          <small class="text-muted text-end"><i class="bi bi-person me-2"></i>Héctor Fernández</small>
+          <div class="mt-3 d-flex gap-2">
+            <a class="btn btn-outline-primary btn-sm" [routerLink]="['/fernandez-idea/user/plist']"
+              ><i class="bi bi-eye me-2"></i>Ver ideas</a
+            >
+            <a class="btn btn-warning btn-sm" [routerLink]="['/fernandez-idea/admin/plist']"
+              ><i class="bi bi-gear-fill me-2"></i>Administrar</a
+            >
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="col-12 col-sm-6 col-lg-4">
+      <div class="card h-100 shadow-lg border-1">
+        <div class="card-body d-flex flex-column">
+          <div class="d-flex align-items-center mb-3">
+            <div
+              class="icon bg-success text-white rounded-circle d-flex align-items-center justify-content-center me-3"
+              style="width: 48px; height: 48px"
+            >
+              <i class="bi bi-egg-fried fs-5"></i>
+            </div>
+            <div>
+              <h5 class="card-title mb-0">Recetas de Cocina</h5>
+              <small class="text-muted">Mi gestor de recetas</small>
+            </div>
+          </div>
+          <p class="card-text text-secondary small flex-grow-1">
+            Explora y administra tu colección personal de recetas. Consulta ingredientes,
+            preparación y más.
+          </p>
+          <small class="text-muted text-end"><i class="bi bi-person me-2"></i>JC Salinas</small>
+          <div class="mt-3 d-flex gap-2">
+            <a class="btn btn-outline-primary btn-sm" [routerLink]="['/receta']">
+              <i class="bi bi-eye me-2"></i>Acceder
+            </a>
+
+            <a class="btn btn-warning btn-sm" [routerLink]="['/receta/plist']">
+              <i class="bi bi-gear-fill me-2"></i>Administrar
+            </a>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- <Preguntas al universo Pollyanna Soares> -->
+
+    <div class="col-12 col-sm-6 col-lg-4">
+      <div class="card h-100 shadow-lg border-1">
+        <div class="card-body d-flex flex-column">
+          <div class="d-flex align-items-center mb-3">
+            <div
+              class="icon bg-primary text-white rounded-circle d-flex align-items-center justify-content-center me-3"
+              style="width: 48px; height: 48px"
+            >
+              <i class="bi bi-journal-text fs-5"></i>
+            </div>
+            <div>
+              <h5 class="card-title mb-0">Preguntas al universo</h5>
+              <small class="text-muted">Mis preguntas más universales</small>
+            </div>
+          </div>
+          <p class="card-text text-secondary small flex-grow-1">
+            Explora y hagas preguntas al universo
+          </p>
+          <small class="text-muted text-end"><i class="bi bi-person me-2"></i>Pollyanna Soares</small>
+          <div class="mt-3 d-flex gap-2">
+            <a class="btn btn-outline-primary btn-sm" [routerLink]="['soares/user/plist']"
+              ><i class="bi bi-eye me-2"></i>Ver Preguntas</a
+            >
+            <a class="btn btn-warning btn-sm" [routerLink]="['soares/admin/plist']"
+              ><i class="bi bi-gear-fill me-2"></i>Administrar</a
+            >
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Preguntas JS y vocabulario de Alan -->
+    <div class="col-12 col-sm-6 col-lg-4">
+      <div class="card h-100 shadow-lg border-1">
+        <div class="card-body d-flex flex-column">
+          <div class="d-flex align-items-center mb-3">
+            <div
+              class="icon bg-primary text-white rounded-circle d-flex align-items-center justify-content-center me-3"
+              style="width: 48px; height: 48px"
+            >
+              💻
+            </div>
+            <div>
+              <h5 class="card-title mb-0">Mi test</h5>
+              <small class="text-muted">Accede a las preguntas</small>
+            </div>
+          </div>
+          <p class="card-text text-secondary small flex-grow-1">
+            Contesta mi test de cuestiones
+          </p>
+          <small class="text-muted text-end"><i class="bi bi-person me-2"></i>Alan Alcanyiz</small>
+          <div class="mt-3 d-flex gap-2">
+            <a class="btn btn-outline-primary btn-sm" [routerLink]="['/alcanyiz']"
+              ><i class="bi bi-eye me-2"></i>Jugar</a
+            >
+            <a class="btn btn-warning btn-sm" [routerLink]="['/alcanyiz/questionlist']"
+              ><i class="bi bi-gear-fill me-2"></i>Administrar</a
+            >
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Ariel Sempertegui Pelicula Card -->
+    <div class="col-12 col-sm-6 col-lg-4">
+      <div class="card h-100 shadow-lg border-1">
+        <div class="card-body d-flex flex-column">
+          <div class="d-flex align-items-center mb-3">
+            <div
+              class="icon bg-primary text-white rounded-circle d-flex align-items-center justify-content-center me-3"
+              style="width: 48px; height: 48px"
+            >
+              <i class="bi bi-journal-text fs-5"></i>
+            </div>
+            <div>
+              <h5 class="card-title mb-0">Cartelera de Películas</h5>
+              <small class="text-muted">Accede a mi catálogo de péliculas</small>
+            </div>
+          </div>
+          <p class="card-text text-secondary small flex-grow-1">
+            Explora quién fue el director, año de lanzamiento y puntuación de las películas.
+          </p>
+          <small class="text-muted text-end"><i class="bi bi-person me-2"></i>Ariel Sempertegui</small>
+          <div class="mt-3 d-flex gap-2">
+            <a class="btn btn-outline-primary btn-sm" [routerLink]="['/sempertegui']"
+              ><i class="bi bi-eye me-2"></i>Ver Catálogo</a
+            >
+            <a class="btn btn-warning btn-sm" [routerLink]="['/sempertegui/plist']"
+              ><i class="bi bi-gear-fill me-2"></i>Administrar</a
+            >
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Lista de libros (Alcalde) -->
+    <div class="col-12 col-sm-6 col-lg-4">
+      <div class="card h-100 shadow-lg border-1">
+        <div class="card-body d-flex flex-column">
+          <div class="d-flex align-items-center mb-3">
+            <div
+              class="icon bg-primary text-white rounded-circle d-flex align-items-center justify-content-center me-3"
+              style="width: 48px; height: 48px"
+            >
+              <i class="bi bi-book-half fs-5"></i>
+            </div>
+            <div>
+              <h5 class="card-title mb-0">Lista de libros</h5>
+              <small class="text-muted">Selección de lecturas con reseña</small>
+            </div>
+          </div>
+          <p class="card-text text-secondary small flex-grow-1">
+            Consulta mis lecturas completadas, con valoración personal y reseña detallada.
+          </p>
+          <small class="text-muted text-end"><i class="bi bi-person me-2"></i>Diego Alcalde</small>
+          <div class="mt-3 d-flex gap-2">
+            <a class="btn btn-outline-primary btn-sm" [routerLink]="['/alcalde']"
+              ><i class="bi bi-eye me-2"></i>Ver selección</a
+            >
+            <a class="btn btn-warning btn-sm" [routerLink]="['/alcalde/plist']"
+              ><i class="bi bi-gear-fill me-2"></i>Administrar</a
+            >
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Contreras utility card -->
+    <div class="col-12 col-sm-6 col-lg-4">
+      <div class="card h-100 shadow-lg border-1">
+        <div class="card-body d-flex flex-column">
+          <div class="d-flex align-items-center mb-3">
+            <div
+              class="icon bg-secondary text-white rounded-circle d-flex align-items-center justify-content-center me-3"
+              style="width: 48px; height: 48px"
+            >
+              <i class="bi bi-tools fs-5"></i>
+            </div>
+            <div>
+              <h5 class="card-title mb-0">Tablon</h5>
+              <small class="text-muted"
+                >Gestion de mi tablón de anuncios</small
+              >
+            </div>
+          </div>
+          <p class="card-text text-secondary small flex-grow-1">
+            Espacio para añadir nuevos tablones de anuncios
+          </p>
+          <small class="text-muted text-end"><i class="bi bi-person me-2"></i>Alvaro Contreras</small>
+          <div class="mt-3 d-flex gap-2">
+            <a class="btn btn-outline-primary btn-sm" [routerLink]="['/tablon']"
+              ><i class="bi bi-eye me-2"></i>Ver tablón</a
+            >
+            <a class="btn btn-warning btn-sm" [routerLink]="['/tablon/plist']"
+              ><i class="bi bi-gear-fill me-2"></i>Administrar</a
+            >
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="col-12 col-sm-6 col-lg-4">
+      <div class="card h-100 shadow-lg border-1">
+        <div class="card-body d-flex flex-column">
+          <div class="d-flex align-items-center mb-3">
+            <div
+              class="icon bg-success text-white rounded-circle d-flex align-items-center justify-content-center me-3"
+              style="width: 48px; height: 48px"
+            >
+              <i class="bi bi-calendar2-event fs-5"></i>
+            </div>
+            <div>
+              <h5 class="card-title mb-0">Utilidad Notas</h5>
+              <small class="text-muted">Mis notas personales</small>
+            </div>
+          </div>
+          <p class="card-text text-secondary small flex-grow-1">
+            Utilidad para crear notas personales para futuros recordatorios.
+          </p>
+          <small class="text-muted text-end"><i class="bi bi-person me-2"></i>Marcos Pallás</small>
+          <div class="mt-3 d-flex gap-2">
+            <a class="btn btn-outline-primary btn-sm" [routerLink]="['/pallas']" disabled
+              ><i class="bi bi-eye me-2"></i>Acceder</a
+            >
+            <a class="btn btn-warning btn-sm" [routerLink]="['/pallas/plist']" disabled
+              ><i class="bi bi-gear-fill me-2"></i>Administrar</a
+            >
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="col-12 col-sm-6 col-lg-4">
+      <div class="card h-100 shadow-lg border-1">
+        <div class="card-body d-flex flex-column">
+          <div class="d-flex align-items-center mb-3">
+            <div
+              class="icon rounded-circle d-flex align-items-center justify-content-center me-3"
+              style="width: 48px; height: 48px; background-color: orange"
+            >
+              <i class="bi bi-lightning-charge fs-5" style="color: white"></i>
+            </div>
+            <div>
+              <h5 class="card-title mb-0">Rutinas de Gimnasio</h5>
+              <small class="text-muted">Accede a mis rutinas</small>
+            </div>
+          </div>
+          <p class="card-text text-secondary small flex-grow-1">
+            ¡Descubre las mejores rutinas para entrenar en tu gimnasio!
+          </p>
+          <small class="text-muted text-end"><i class="bi bi-person me-2"></i>Daniel Zanon</small>
+          <div class="mt-3 d-flex gap-2">
+            <a class="btn btn-outline-primary btn-sm" [routerLink]="['/zanon']">
+              <i class="bi bi-eye me-2"></i>
+              Acceder
+            </a>
+            <a class="btn btn-warning btn-sm" [routerLink]="['/zanon/plist']">
+              <i class="bi bi-gear-fill me-2"></i>
+              Administrar
+            </a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
 </div>

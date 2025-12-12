@@ -1,0 +1,39 @@
+<!-- crear la tabla con oBlog -->
+<div class="container my-4 edit-form">
+  <div class="row justify-content-center">
+    <div class="col-12 col-lg-8">
+      <div class="form-card">
+        <h1 class="my-5">Detalle de la publicación</h1>
+
+        <table class="table">
+          <thead>
+            <tr>
+              <th scope="col">ID</th>
+              <th scope="row">{{ oSilvestre?.id }}</th>
+            </tr>
+            <tr>
+              <th scope="col">Título</th>
+              <td>{{ oSilvestre?.titulo }}</td>
+            </tr>
+            <tr>
+              <th scope="col" class="align-middle">Descripción</th>
+              <td>{{ oSilvestre?.descripcion }}</td>
+            </tr>
+            <tr>
+              <th scope="col">Url de imagen</th>
+              <td>{{ oSilvestre?.urlImagen }}</td>
+            </tr>
+            <tr>
+              <th scope="col">Creación</th>
+              <td>{{ oSilvestre?.fechaCreacion }}</td>
+            </tr>
+            <tr>
+              <th scope="col">Actualización</th>
+              <td>{{ oSilvestre?.fechaModificacion }}</td>
+            </tr>
+          </thead>
+        </table>
+      </div>
+    </div>
+  </div>
+</div>

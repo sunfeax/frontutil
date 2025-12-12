@@ -1,0 +1,191 @@
+<div class="container my-4">
+  <!-- Header -->
+  <div class="row mb-4">
+    <div class="col">
+      <div class="d-flex justify-content-between align-items-center">
+        <div>
+          <h1 class="h3 mb-1">
+            <i class="bi bi-cart-check text-primary me-2"></i>
+            Mantenimiento de Lista de Compra
+          </h1>
+          <p class="text-muted small mb-0">Gestiona los items de tu lista de compra</p>
+        </div>
+        <a [routerLink]="['/calinescu/new']" class="btn btn-primary">
+          <i class="bi bi-plus-circle me-2"></i>Nuevo Item
+        </a>
+      </div>
+    </div>
+  </div>
+
+  <!-- Generador de datos -->
+  <div class="row mb-4">
+    <div class="col">
+      <div class="card shadow-sm">
+        <div class="card-body">
+          <div class="row align-items-center">
+            <div class="col-auto">
+              <label for="rellenaSelect" class="form-label mb-0 fw-semibold">
+                <i class="bi bi-database me-2"></i>Datos de prueba:
+              </label>
+            </div>
+            <div class="col-auto">
+              <select
+                #cantidadSel
+                id="rellenaSelect"
+                class="form-select form-select-sm"
+                (change)="cambiarCantidad(cantidadSel.value)"
+              >
+                <option [selected]="rellenaCantidad === 10" value="10">10 items</option>
+                <option [selected]="rellenaCantidad === 100" value="100">100 items</option>
+                <option [selected]="rellenaCantidad === 1000" value="1000">1000 items</option>
+              </select>
+            </div>
+            <div class="col-auto">
+              <button
+                class="btn btn-outline-primary btn-sm"
+                [disabled]="rellenando"
+                (click)="generarDatosFalsos()"
+              >
+                @if (rellenando) {
+                <span
+                  class="spinner-border spinner-border-sm me-2"
+                  role="status"
+                  aria-hidden="true"
+                ></span>
+                Generando...
+                } @else {
+                <i class="bi bi-gear-fill me-2"></i>Generar
+                }
+              </button>
+            </div>
+            <div class="col-auto">
+              <button
+                class="btn btn-danger btn-sm"
+                [disabled]="borrandoTodo || !oPage || !oPage.totalElements || oPage.totalElements === 0"
+                (click)="confirmarBorrarTodo()"
+                title="Acción irreversible"
+              >
+                @if (borrandoTodo) {
+                <span
+                  class="spinner-border spinner-border-sm me-2"
+                  role="status"
+                  aria-hidden="true"
+                ></span>
+                Borrando...
+                } @else {
+                <i class="bi bi-trash-fill me-2"></i>Borrar Todo (Irreversible)
+                }
+              </button>
+            </div>
+            <div class="col">
+              @if (rellenaOk) {
+              <div class="text-success small">
+                <i class="bi bi-check-circle-fill me-1"></i>
+                {{ rellenaOk }} items generados correctamente
+              </div>
+              } @if (rellenaError) {
+              <div class="text-danger small">
+                <i class="bi bi-exclamation-triangle-fill me-1"></i>{{ rellenaError }}
+              </div>
+              }
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Controles de paginación -->
+  <div class="row mb-3">
+    <div class="col">
+      <div class="d-flex justify-content-between align-items-center">
+        <app-paginacion
+          [numPage]="numPage"
+          [numPages]="oPage?.totalPages || 1"
+          (pageChange)="irAPagina($event)"
+        >
+        </app-paginacion>
+        <app-botonera-rpp [numRpp]="numRpp" (rppChange)="cambiarRpp($event)"></app-botonera-rpp>
+      </div>
+    </div>
+  </div>
+
+  <!-- Tabla de items -->
+  <div class="row">
+    <div class="col">
+      <div class="card shadow-sm">
+        <div class="table-responsive">
+          <table class="table table-hover table-striped mb-0">
+      <thead>
+        <tr>
+          <th scope="col">ID</th>
+          <th scope="col">Nombre</th>
+          <th scope="col">Precio</th>
+          <th scope="col">Cantidad</th>
+          <th scope="col">Fecha Compra Esperada</th>
+          <th scope="col">Creación</th>
+          <th scope="col">Modificación</th>
+          <th scope="col">Publicado</th>
+          <th scope="col">Operaciones</th>
+        </tr>
+      </thead>
+      <tbody>
+        @for (oCalinescu of oPage?.content; track oCalinescu.id ) {
+        <tr>
+          <th scope="row">{{ oCalinescu.id }}</th>
+          <td>{{ oCalinescu.nombre }}</td>
+          <td>
+            <span class="badge bg-info text-dark">
+              {{ oCalinescu.precio || 0 | number: '1.2-2' }} €
+            </span>
+          </td>
+          <td>
+            <span class="badge bg-secondary">
+              {{ oCalinescu.cantidad || 1 }}
+            </span>
+          </td>
+          <td>{{ oCalinescu.fecha_compra_esperada | datetime }}</td>
+          <td>{{ oCalinescu.fecha_creacion | datetime }}</td>
+          <td>{{ oCalinescu.fecha_modificacion | datetime }}</td>
+          <td>
+            @if (oCalinescu.publicado) {
+              <i class="bi bi-check-circle-fill text-success"></i>
+            } @else {
+              <i class="bi bi-x-circle-fill text-danger"></i>
+            }
+          </td>
+          <td>
+            <div class="btn-group btn-group-sm" role="group" aria-label="Small button group">
+              <a [routerLink]="['/calinescu/view', oCalinescu.id]" class="btn btn-outline-primary">
+                <i class="bi bi-eye"></i>
+              </a>
+              <a [routerLink]="['/calinescu/edit', oCalinescu.id]" class="btn btn-outline-secondary">
+                <i class="bi bi-pencil-square"></i>
+              </a>
+              <a [routerLink]="['/calinescu/remove', oCalinescu.id]" class="btn btn-outline-danger">
+                <i class="bi bi-trash"></i>
+              </a>
+            </div>
+          </td>
+        </tr>
+        }
+      </tbody>
+      <tfoot>
+        <tr class="table-success">
+          <th colspan="2" class="text-end fw-bold">TOTAL DE TODA LA LISTA:</th>
+          <th>
+            <span class="badge bg-success fs-6">
+              <i class="bi bi-currency-euro me-1"></i>{{ totalGlobal | number: '1.2-2' }} €
+            </span>
+          </th>
+          <th colspan="5" class="text-muted small">
+            <i class="bi bi-info-circle me-1"></i>Total de {{ oPage?.totalElements || 0 }} productos
+          </th>
+        </tr>
+      </tfoot>
+    </table>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

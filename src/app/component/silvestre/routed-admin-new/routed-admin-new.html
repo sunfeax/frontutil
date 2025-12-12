@@ -1,0 +1,116 @@
+<div class="container my-4 new-form">
+  <div class="row justify-content-center">
+    <div class="col-12 col-lg-8">
+      <div class="form-card">
+        <header class="form-header mb-4">
+          <h1 class="form-title">Crear nueva publicación de imagen</h1>
+          <p class="text-muted small">Completa los campos para crear una nueva publicación</p>
+        </header>
+
+        @if (error) {
+        <div class="alert alert-danger" role="alert">
+          <i class="bi bi-exclamation-triangle me-2"></i>{{ error }}
+        </div>
+        }
+
+        <form [formGroup]="silvestreForm" (ngSubmit)="onSubmit()" novalidate>
+          <!-- Título -->
+          <div class="mb-4">
+            <label for="titulo" class="form-label">Título <span class="text-danger">*</span></label>
+            <input
+              type="text"
+              class="form-control"
+              [class.is-invalid]="titulo?.invalid && titulo?.touched"
+              [class.is-valid]="titulo?.valid && titulo?.touched"
+              id="titulo"
+              formControlName="titulo"
+              placeholder="Introduce el título de la publicación"
+            />
+            @if (titulo?.invalid && titulo?.touched) {
+            <div class="invalid-feedback">
+              @if (titulo?.errors?.['required']) {
+                <span>El título es obligatorio.</span>
+              }
+              @if (titulo?.errors?.['minlength']) {
+                <span>El título debe tener al menos 3 caracteres.</span>
+              }
+              @if (titulo?.errors?.['maxlength']) {
+                <span>El título no puede superar 200 caracteres.</span>
+              }
+            </div>
+            }
+          </div>
+
+          <!-- Descripción -->
+          <div class="mb-4">
+            <label for="descripcion" class="form-label">Descripción <span class="text-danger">*</span></label>
+            <textarea
+              class="form-control"
+              [class.is-invalid]="descripcion?.invalid && descripcion?.touched"
+              [class.is-valid]="descripcion?.valid && descripcion?.touched"
+              id="descripcion"
+              formControlName="descripcion"
+              rows="8"
+              placeholder="Escribe la descripción de la publicación"
+            ></textarea>
+            @if (descripcion?.invalid && descripcion?.touched) {
+            <div class="invalid-feedback">
+              @if (descripcion?.errors?.['required']) {
+                <span>La descripción es obligatoria.</span>
+              }
+              @if (descripcion?.errors?.['minlength']) {
+                <span>La descripción debe tener al menos 10 caracteres.</span>
+              }
+            </div>
+            }
+          </div>
+
+          <!-- Url de imagen (ahora obligatoria) -->
+          <div class="mb-4">
+            <label for="urlImagen" class="form-label">Url de imagen <span class="text-danger">*</span></label>
+            <input
+              type="text"
+              class="form-control"
+              [class.is-invalid]="urlImagen?.invalid && urlImagen?.touched"
+              [class.is-valid]="urlImagen?.valid && urlImagen?.touched"
+              id="urlImagen"
+              formControlName="urlImagen"
+              placeholder="Introduce la URL de la imagen (obligatoria)"
+            />
+            @if (urlImagen?.invalid && urlImagen?.touched) {
+            <div class="invalid-feedback">
+              @if (urlImagen?.errors?.['required']) {
+                <span>La URL de la imagen es obligatoria.</span>
+              }
+              @if (urlImagen?.errors?.['maxlength']) {
+                <span>La URL de la imagen no puede superar 200 caracteres.</span>
+              }
+            </div>
+            }
+            <small class="form-text text-muted">Obligatoria. Si no sabes qué poner, busca en pixabay.com</small>
+          </div>
+
+          <!-- Botones -->
+          <div class="d-flex justify-content-between align-items-center mt-4">
+            <a [routerLink]="['/silvestre/plist']" class="btn btn-outline-secondary">
+              <i class="bi bi-arrow-left me-2"></i>Cancelar
+            </a>
+            <button 
+              type="submit" 
+              class="btn btn-primary"
+              [disabled]="submitting || silvestreForm.invalid"
+            >
+              @if (submitting) {
+                <span class="spinner-border spinner-border-sm me-2" role="status" aria-hidden="true"></span>
+              }
+              @if (!submitting) {
+                <i class="bi bi-plus-circle me-2"></i>
+              }
+              Crear Post
+            </button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>

@@ -10,20 +10,22 @@
 
     <div class="d-flex gap-2">
       <i class="bi bi-quote text-primary fs-1 lh-1"></i>
-      <p class="fs-5 mb-0">{{ oVisita.comentario | trim : 100}}</p>
+      <p class="fs-6 mb-0">{{ oVisita.comentario | trim : 100}}</p>
     </div>
 
-    <div class="border-top pt-3 d-flex flex-wrap gap-3 text-muted small">
+    <div class="border-top pt-3 d-flex align-items-center justify-content-between text-muted small">
       <span class="d-flex align-items-center gap-1">
         <i class="bi bi-calendar-event text-primary"></i>
-        <strong>Publicado:</strong> {{ oVisita.fechaCreacion }}
+        <strong>Fecha:</strong> {{ oVisita.fechaCreacion | datetime }}
       </span>
-      @if (oVisita.fechaModificacion) {
-        <span class="d-flex align-items-center gap-1">
-          <i class="bi bi-arrow-repeat text-secondary"></i>
-          <strong>Actualizado:</strong> {{ oVisita.fechaModificacion }}
-        </span>
-      }
+
+      <a [routerLink]="['/visitas/view', oVisita.id]"
+         class="btn btn-outline-primary btn-sm d-inline-flex align-items-center gap-1 px-2 py-1 rounded-1"
+         style="height: 32px; width: auto;"
+         title="Leer">
+        <i class="bi bi-eye"></i>
+        <span>Leer</span>
+      </a>
     </div>
   </div>
 </div>

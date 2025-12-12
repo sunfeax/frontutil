@@ -1,0 +1,30 @@
+<div class="front-view-recurso d-flex flex-column flex-md-row align-items-start">
+  <div class="thumb me-3" aria-hidden>
+    <i [class]="iconClass" aria-hidden="true"></i>
+  </div>
+  <div class="content flex-fill">
+    <h1 class="title">{{ oRecurso?.nombre }}</h1>
+    <p class="excerpt">
+      <a [href]="oRecurso?.url" target="_blank">{{ oRecurso?.url ?? '' | trim : 150 }}</a>
+    </p>
+    <div class="excerpt">
+      <a [routerLink]="['/recurso/post', oRecurso?.id]" class="btn btn-sm btn-outline-primary">Ver</a>
+    </div>
+    <div class="d-flex justify-content-end">
+      <small class="text-muted me-3">
+        Creado el {{ oRecurso?.fechaCreacion | datetime : 'solofechacompleta' }}
+        a las {{ oRecurso?.fechaCreacion | datetime : 'solohora' }}
+      </small>
+    </div>
+
+    <div class="d-flex justify-content-end">
+      <small class="text-muted me-3">
+        @if (oRecurso?.publico) {
+          <i class="bi bi-eye"></i> Público
+        } @else {
+          <i class="bi bi-eye-slash"></i> Privado
+        }
+      </small>
+    </div>
+  </div>
+</div>

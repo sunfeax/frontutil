@@ -1,0 +1,170 @@
+<div class="container my-5">
+  <div class="row justify-content-center">
+    <div class="col-12 col-lg-9 col-xl-8">
+      <div class="card shadow">
+        <div class="card-header bg-success text-white py-3">
+          <h1 class="h4 mb-1">
+            <i class="bi bi-plus-circle me-2"></i>Crear Nuevo Item
+          </h1>
+          <p class="small mb-0 opacity-75">Completa los campos para agregar un item a la lista de compra</p>
+        </div>
+        <div class="card-body p-4">
+
+        @if (error) {
+        <div class="alert alert-danger" role="alert">
+          <i class="bi bi-exclamation-triangle me-2"></i>{{ error }}
+        </div>
+        }
+
+        <form [formGroup]="calinescuForm" (ngSubmit)="enviarFormulario()" novalidate>
+          <!-- Nombre -->
+          <div class="mb-4">
+            <label for="nombre" class="form-label">Nombre <span class="text-danger">*</span></label>
+            <input
+              type="text"
+              class="form-control"
+              [class.is-invalid]="nombre?.invalid && nombre?.touched"
+              [class.is-valid]="nombre?.valid && nombre?.touched"
+              id="nombre"
+              formControlName="nombre"
+              placeholder="Introduce el nombre del item"
+            />
+            @if (nombre?.invalid && nombre?.touched) {
+            <div class="invalid-feedback">
+              @if (nombre?.errors?.['required']) {
+                <span>El nombre es obligatorio.</span>
+              }
+              @if (nombre?.errors?.['minlength']) {
+                <span>El nombre debe tener al menos 3 caracteres.</span>
+              }
+              @if (nombre?.errors?.['maxlength']) {
+                <span>El nombre no puede superar 255 caracteres.</span>
+              }
+            </div>
+            }
+          </div>
+
+          <!-- Contenido -->
+          <div class="mb-4">
+            <label for="contenido" class="form-label">Contenido <span class="text-danger">*</span></label>
+            <textarea
+              class="form-control"
+              [class.is-invalid]="contenido?.invalid && contenido?.touched"
+              [class.is-valid]="contenido?.valid && contenido?.touched"
+              id="contenido"
+              formControlName="contenido"
+              rows="8"
+              placeholder="Escribe el contenido del item"
+            ></textarea>
+            @if (contenido?.invalid && contenido?.touched) {
+            <div class="invalid-feedback">
+              @if (contenido?.errors?.['required']) {
+                <span>El contenido es obligatorio.</span>
+              }
+              @if (contenido?.errors?.['minlength']) {
+                <span>El contenido debe tener al menos 3 caracteres.</span>
+              }
+            </div>
+            }
+          </div>
+
+          <!-- Fecha Compra Esperada -->
+          <div class="mb-4">
+            <label for="fechaCompraEsperada" class="form-label">Fecha Compra Esperada</label>
+            <input
+              type="datetime-local"
+              class="form-control"
+              id="fechaCompraEsperada"
+              formControlName="fechaCompraEsperada"
+            />
+            <small class="form-text text-muted">Opcional: indica cuándo esperas comprar este item</small>
+          </div>
+
+          <!-- Precio -->
+          <div class="mb-4">
+            <label for="precio" class="form-label">Precio Estimado (€)</label>
+            <input
+              type="number"
+              class="form-control"
+              [class.is-invalid]="precio?.invalid && precio?.touched"
+              [class.is-valid]="precio?.valid && precio?.touched"
+              id="precio"
+              formControlName="precio"
+              step="0.01"
+              min="0"
+              placeholder="0.00"
+            />
+            @if (precio?.invalid && precio?.touched) {
+            <div class="invalid-feedback">
+              @if (precio?.errors?.['min']) {
+                <span>El precio no puede ser negativo.</span>
+              }
+            </div>
+            }
+            <small class="form-text text-muted">Opcional: precio estimado del producto</small>
+          </div>
+
+          <!-- Cantidad -->
+          <div class="mb-4">
+            <label for="cantidad" class="form-label">Cantidad <span class="text-danger">*</span></label>
+            <input
+              type="number"
+              class="form-control"
+              [class.is-invalid]="cantidad?.invalid && cantidad?.touched"
+              [class.is-valid]="cantidad?.valid && cantidad?.touched"
+              id="cantidad"
+              formControlName="cantidad"
+              min="1"
+              placeholder="1"
+            />
+            @if (cantidad?.invalid && cantidad?.touched) {
+            <div class="invalid-feedback">
+              @if (cantidad?.errors?.['required']) {
+                <span>La cantidad es obligatoria.</span>
+              }
+              @if (cantidad?.errors?.['min']) {
+                <span>La cantidad debe ser al menos 1.</span>
+              }
+            </div>
+            }
+            <small class="form-text text-muted">Número de unidades del producto</small>
+          </div>
+
+          <!-- Publicado -->
+          <div class="mb-4 form-check">
+            <input
+              type="checkbox"
+              class="form-check-input"
+              id="publicado"
+              formControlName="publicado"
+            />
+            <label class="form-check-label" for="publicado">
+              Publicado
+            </label>
+          </div>
+
+          <!-- Botones -->
+          <div class="d-flex justify-content-between align-items-center mt-4">
+            <a [routerLink]="['/calinescu/plist']" class="btn btn-outline-secondary">
+              <i class="bi bi-arrow-left me-2"></i>Cancelar
+            </a>
+            <button 
+              type="submit" 
+              class="btn btn-primary"
+              [disabled]="submitting || calinescuForm.invalid"
+            >
+              @if (submitting) {
+                <span class="spinner-border spinner-border-sm me-2" role="status" aria-hidden="true"></span>
+              }
+              @if (!submitting) {
+                <i class="bi bi-plus-circle me-2"></i>
+              }
+              Crear Item
+            </button>
+          </div>
+        </form>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

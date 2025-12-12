@@ -1,0 +1,47 @@
+@keyframes glow {
+  0% { opacity: 0.5; }
+  50% { opacity: 0.9; }
+  100% { opacity: 0.5; }
+}
+
+.visitas-view .hero {
+  background: linear-gradient(135deg, #1d4ed8, #6366f1);
+  border-radius: 22px;
+}
+
+.visitas-view .hero .glow {
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(ellipse at 20% 20%, rgba(255,255,255,0.18), transparent 40%),
+              radial-gradient(ellipse at 80% 0%, rgba(255,255,255,0.12), transparent 35%);
+  animation: glow 6s ease-in-out infinite;
+  pointer-events: none;
+}
+
+.icon-circle {
+  width: 52px;
+  height: 52px;
+  border-radius: 50%;
+  font-size: 1.3rem;
+}
+
+.avatar {
+  width: 56px;
+  height: 56px;
+  border-radius: 16px;
+  font-size: 1.25rem;
+}
+
+.quote-box {
+  border: 1px solid rgba(13, 110, 253, 0.12);
+  background: linear-gradient(180deg, #f8f9ff, #ffffff);
+}
+
+.detail-tile {
+  border: 1px solid rgba(108, 117, 125, 0.1);
+}
+
+.creative-slot {
+  border: 1.5px dashed rgba(13, 110, 253, 0.35);
+  background: linear-gradient(180deg, rgba(13, 110, 253, 0.04), rgba(255, 255, 255, 0.9));
+}
