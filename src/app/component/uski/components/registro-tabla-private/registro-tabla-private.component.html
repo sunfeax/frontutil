@@ -1,15 +1,15 @@
-<th scope="row">{{ visita.id }}</th>
-<td class="fw-semibold text-truncate" style="max-width: 160px;" title="{{ visita.nombre }}">{{ visita.nombre }}</td>
-<td class="text-truncate" style="max-width: 340px;" title="{{ visita.comentario }}">{{ visita.comentario }}</td>
-<td class="text-center">
+<th scope="row" data-label="ID">{{ visita.id }}</th>
+<td data-label="Nombre" class="fw-semibold text-truncate" title="{{ visita.nombre }}">{{ visita.nombre }}</td>
+<td data-label="Comentario" class="text-truncate comment-col" title="{{ visita.comentario }}">{{ visita.comentario }}</td>
+<td data-label="Estado" class="text-center">
   @if (visita.estaPublicado) {
     <span class="badge bg-success">Publicado</span>
   } @else {
     <span class="badge bg-secondary">Oculto</span>
   }
 </td>
-<td class="text-nowrap">{{ visita.fechaCreacion | datetime }}</td>
-<td class="text-nowrap">{{ visita.fechaModificacion | datetime }}</td>
-<td class="text-end">
+<td data-label="Creado" class="text-nowrap">{{ visita.fechaCreacion | datetime }}</td>
+<td data-label="Modificado" class="text-nowrap">{{ visita.fechaModificacion | datetime }}</td>
+<td data-label="Acciones" class="text-end">
   <app-registro-tabla-actions [visita]="visita"></app-registro-tabla-actions>
 </td>

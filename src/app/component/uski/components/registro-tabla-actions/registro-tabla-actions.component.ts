@@ -29,8 +29,8 @@ export class RegistroTablaActionsComponent {
       .subscribe({
         next: (visitaActualizada) => {
           Object.assign(this.visita, visitaActualizada);
-          const mensaje = visitaActualizada.estaPublicado ? 'Publicación activada' : 'Publicación desactivada';
-          this.snackBar.open(mensaje, 'Cerrar', { duration: 3000 });
+          const mensaje = visitaActualizada.estaPublicado ? 'Reseña publicada' : 'Reseña ocultada';
+          this.snackBar.open(mensaje, 'Cerrar', { duration: 4000 });
         },
         error: (err) => {
           this.snackBar.open('No se pudo actualizar el estado', 'Cerrar', { duration: 4000 });
