@@ -196,11 +196,11 @@ export const routes: Routes = [
   // Reyna (Frases Motivacionales) routes
   { path: 'reyna', component: ReynaUserPlist },
   { path: 'reyna/post/:id', component: ReynaUserView },
-  { path: 'reyna/plist', component: ReynaAdminPlist },
-  { path: 'reyna/view/:id', component: ReynaAdminView },
-  { path: 'reyna/new', component: ReynaAdminNew },
-  { path: 'reyna/edit/:id', component: ReynaAdminEdit },
-  { path: 'reyna/remove/:id', component: ReynaAdminRemove },
+  { path: 'reyna/plist', component: ReynaAdminPlist, canActivate: [AdminGuard] },
+  { path: 'reyna/view/:id', component: ReynaAdminView, canActivate: [AdminGuard] },
+  { path: 'reyna/new', component: ReynaAdminNew, canActivate: [AdminGuard] },
+  { path: 'reyna/edit/:id', component: ReynaAdminEdit, canActivate: [AdminGuard] },
+  { path: 'reyna/remove/:id', component: ReynaAdminRemove, canActivate: [AdminGuard] },
   //
   { path: 'calinescu', component: RoutedUserPlistCalinescu },
   { path: 'calinescu/item/:id', component: RoutedUserViewCalinescu },
