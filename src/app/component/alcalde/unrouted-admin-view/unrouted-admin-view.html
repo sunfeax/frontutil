@@ -3,7 +3,7 @@
     <div class="col-12 col-lg-9">
       <div class="card shadow-sm">
         <div class="card-body">
-          <h2 class="h4 mb-4">Detalle de libro leido</h2>
+          <h2 class="h4 mb-4">Detalle de libro leído</h2>
           <div class="table-responsive">
             <table class="table table-sm align-middle">
               <tbody>
@@ -34,11 +34,7 @@
                   </td>
                 </tr>
                 <tr>
-                  <th scope="row">Lectura</th>
-                  <td>{{ entry?.fechaLectura }}</td>
-                </tr>
-                <tr>
-                  <th scope="row">Publicación</th>
+                  <th scope="row">Estado</th>
                   <td>
                     <span [class]="entry?.publicado ? 'badge bg-success' : 'badge bg-secondary'">
                       {{ getPublicadoLabel(entry?.publicado) }}
@@ -46,12 +42,20 @@
                   </td>
                 </tr>
                 <tr>
-                  <th scope="row">Seleccion frontal</th>
+                  <th scope="row">Selección frontal</th>
                   <td>
                     <span [class]="entry?.destacado ? 'badge bg-warning text-dark' : 'badge bg-outline-secondary'">
                       {{ getDestacadoLabel(entry?.destacado) }}
                     </span>
                   </td>
+                </tr>
+                <tr>
+                  <th scope="row">Fecha de creación</th>
+                  <td>{{ entry?.fechaCreacion | datetime }}</td>
+                </tr>
+                <tr>
+                  <th scope="row">Última actualización</th>
+                  <td>{{ entry?.fechaModificacion | datetime }}</td>
                 </tr>
               </tbody>
             </table>

@@ -2,9 +2,13 @@ import { Component, OnInit, inject } from '@angular/core';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { Router, RouterLink } from '@angular/router';
 import { HttpErrorResponse } from '@angular/common/http';
+import { MatDialog } from '@angular/material/dialog';
+import { Observable } from 'rxjs';
 
 import { AlcaldeService } from '../../../service/alcalde';
 import { IAlcalde } from '../../../model/alcalde';
+import { CanComponentDeactivate } from '../../../guards/pending-changes.guard';
+import { ConfirmDialogComponent } from '../../shared/confirm-dialog/confirm-dialog.component';
 
 @Component({
   selector: 'app-alcalde-admin-new',
@@ -12,14 +16,16 @@ import { IAlcalde } from '../../../model/alcalde';
   templateUrl: './routed-admin-new.html',
   styleUrl: './routed-admin-new.css',
 })
-export class AlcaldeRoutedAdminNew implements OnInit {
+export class AlcaldeRoutedAdminNew implements OnInit, CanComponentDeactivate {
   private fb = inject(FormBuilder);
   private router = inject(Router);
   private service = inject(AlcaldeService);
+  private dialog = inject(MatDialog);
 
   form!: FormGroup;
   submitting = false;
   error: string | null = null;
+  private formSubmitted = false;
 
   ngOnInit(): void {
     this.form = this.fb.group({
@@ -28,10 +34,22 @@ export class AlcaldeRoutedAdminNew implements OnInit {
       genero: ['', [Validators.required, Validators.minLength(3), Validators.maxLength(100)]],
       reseña: ['', [Validators.required, Validators.minLength(20)]],
       valoracion: [4, [Validators.required, Validators.min(1), Validators.max(5)]],
-      fechaLectura: ['', [Validators.required]],
       publicado: [true],
       destacado: [false],
     });
+  }
+
+  canDeactivate(): Observable<boolean> | boolean {
+    if (this.formSubmitted || !this.form.dirty) {
+      return true;
+    }
+    const ref = this.dialog.open(ConfirmDialogComponent, {
+      data: {
+        title: 'Cambios sin guardar',
+        message: 'Hay cambios sin guardar. ¿Desea salir sin guardar los cambios?'
+      }
+    });
+    return ref.afterClosed();
   }
 
   onSubmit() {
@@ -47,7 +65,6 @@ export class AlcaldeRoutedAdminNew implements OnInit {
       genero: this.form.value.genero,
       reseña: this.form.value.reseña,
       valoracion: Number(this.form.value.valoracion),
-      fechaLectura: this.form.value.fechaLectura,
       publicado: this.form.value.publicado,
       destacado: this.form.value.destacado,
     };
@@ -55,6 +72,7 @@ export class AlcaldeRoutedAdminNew implements OnInit {
     this.service.create(payload).subscribe({
       next: () => {
         this.submitting = false;
+        this.formSubmitted = true;
         this.router.navigate(['/alcalde/plist']);
       },
       error: (err: HttpErrorResponse) => {
@@ -69,5 +87,4 @@ export class AlcaldeRoutedAdminNew implements OnInit {
   get autor() { return this.form.get('autor'); }
   get genero() { return this.form.get('genero'); }
   get valoracion() { return this.form.get('valoracion'); }
-  get fechaLectura() { return this.form.get('fechaLectura'); }
 }

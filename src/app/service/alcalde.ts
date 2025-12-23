@@ -44,7 +44,36 @@ export class AlcaldeService {
     return this.http.get<number>(`${serverURL}/alcalde/rellena/${cantidad}`);
   }
 
-  selection(): Observable<IAlcalde[]> {
-    return this.http.get<IAlcalde[]>(`${serverURL}/alcalde/selection`);
+  empty(): Observable<number> {
+    return this.http.delete<number>(`${serverURL}/alcalde/empty`);
+  }
+
+  publicar(id: number): Observable<number> {
+    return this.http.put<number>(`${serverURL}/alcalde/publicar/${id}`, {});
+  }
+
+  despublicar(id: number): Observable<number> {
+    return this.http.put<number>(`${serverURL}/alcalde/despublicar/${id}`, {});
+  }
+
+  selection(limit: number = 6): Observable<IAlcalde[]> {
+    return this.http.get<IAlcalde[]>(`${serverURL}/alcalde/selection?limit=${limit}`);
+  }
+
+  generos(): Observable<string[]> {
+    return this.http.get<string[]>(`${serverURL}/alcalde/generos`);
+  }
+
+  getPageFiltered(page: number, rpp: number, order: string, direction: string, genero: string | null, minValoracion: number): Observable<IPage<IAlcalde>> {
+    const query = new URLSearchParams({
+      page: page.toString(),
+      size: rpp.toString(),
+      sort: `${order},${direction}`,
+      minValoracion: minValoracion.toString()
+    });
+    if (genero && genero !== 'Todos') {
+      query.append('genero', genero);
+    }
+    return this.http.get<IPage<IAlcalde>>(`${serverURL}/alcalde/filtered?${query.toString()}`);
   }
 }

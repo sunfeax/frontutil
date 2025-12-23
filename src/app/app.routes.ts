@@ -275,11 +275,11 @@ export const routes: Routes = [
   //
   { path: 'alcalde', component: AlcaldeRoutedUserPlist },
   { path: 'alcalde/post/:id', component: AlcaldeRoutedUserView },
-  { path: 'alcalde/plist', component: AlcaldeRoutedAdminPlist },
-  { path: 'alcalde/view/:id', component: AlcaldeRoutedAdminView },
-  { path: 'alcalde/new', component: AlcaldeRoutedAdminNew },
-  { path: 'alcalde/edit/:id', component: AlcaldeRoutedAdminEdit },
-  { path: 'alcalde/remove/:id', component: AlcaldeRoutedAdminRemove },
+  { path: 'alcalde/plist', component: AlcaldeRoutedAdminPlist, canActivate: [AdminGuard] },
+  { path: 'alcalde/view/:id', component: AlcaldeRoutedAdminView, canActivate: [AdminGuard] },
+  { path: 'alcalde/new', component: AlcaldeRoutedAdminNew, canActivate: [AdminGuard], canDeactivate: [PendingChangesGuard] },
+  { path: 'alcalde/edit/:id', component: AlcaldeRoutedAdminEdit, canActivate: [AdminGuard], canDeactivate: [PendingChangesGuard] },
+  { path: 'alcalde/remove/:id', component: AlcaldeRoutedAdminRemove, canActivate: [AdminGuard] },
   //
   { path: 'sempertegui', component: SemperteguiRoutedUserPlist },
   { path: 'sempertegui/plist', component: SemperteguiRoutedAdminPlist },
