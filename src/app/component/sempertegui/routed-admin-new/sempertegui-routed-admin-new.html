@@ -14,28 +14,53 @@
         }
 
         <form [formGroup]="movieForm" (ngSubmit)="onSubmit()" novalidate>
-          <!-- Nombre -->
+          <!-- Título -->
           <div class="mb-4">
-            <label for="nombre" class="form-label">Nombre <span class="text-danger">*</span></label>
+            <label for="titulo" class="form-label">Título <span class="text-danger">*</span></label>
             <input
               type="text"
               class="form-control"
-              [class.is-invalid]="nombre?.invalid && nombre?.touched"
-              [class.is-valid]="nombre?.valid && nombre?.touched"
-              id="nombre"
-              formControlName="nombre"
+              [class.is-invalid]="titulo?.invalid && titulo?.touched"
+              [class.is-valid]="titulo?.valid && titulo?.touched"
+              id="titulo"
+              formControlName="titulo"
               placeholder="Introduce el título del post"
             />
-            @if (nombre?.invalid && nombre?.touched) {
+            @if (titulo?.invalid && titulo?.touched) {
             <div class="invalid-feedback">
-              @if (nombre?.errors?.['required']) {
-                <span>El campo nombre es obligatorio.</span>
+              @if (titulo?.errors?.['required']) {
+                <span>El campo titulo es obligatorio.</span>
               }
-              @if (nombre?.errors?.['minlength']) {
-                <span>El campo nombre debe tener al menos 2 caracteres.</span>
+              @if (titulo?.errors?.['minlength']) {
+                <span>Debe tener al menos 2 caracteres.</span>
               }
-              @if (nombre?.errors?.['maxlength']) {
-                <span>El campo nombre no puede superar 100 caracteres.</span>
+              @if (titulo?.errors?.['maxlength']) {
+                <span>No puede superar 100 caracteres.</span>
+              }
+            </div>
+            }
+          </div>
+
+          <!-- Sinopsis -->
+          <div class="mb-4">
+            <label for="sinopsis" class="form-label">Sinopsis <span class="text-danger">*</span></label>
+            <textarea
+              class="form-control"
+              [class.is-invalid]="sinopsis?.invalid && sinopsis?.touched"
+              [class.is-valid]="sinopsis?.valid && sinopsis?.touched"
+              id="sinopsis"
+              formControlName="sinopsis"
+              rows="8"
+              placeholder="Escribe la sinopsis de la película"
+            ></textarea>
+            @if (sinopsis?.invalid && sinopsis?.touched) {
+            <div class="invalid-feedback">
+              @if (sinopsis?.errors?.['required']) {
+                <span>La sinopsis no puede estar vacía.</span>
+              } @else if (sinopsis?.errors?.['minlength']) {
+                <span>Debe contener al menos 10 caracteres.</span>
+              } @else if(sinopsis?.errors?.['maxlength']) {
+                <span>No puede contener más de 1024 caracteres.</span>
               }
             </div>
             }
@@ -43,26 +68,26 @@
 
           <!-- Género -->
           <div class="mb-4">
-            <label for="genero" class="form-label">Género <span class="text-danger">*</span></label>
+            <label for="generos" class="form-label">Géneros <span class="text-danger">*</span></label>
             <input
               type="text"
               class="form-control"
-              [class.is-invalid]="genero?.invalid && genero?.touched"
-              [class.is-valid]="genero?.valid && genero?.touched"
-              id="genero"
-              formControlName="genero"
+              [class.is-invalid]="generos?.invalid && generos?.touched"
+              [class.is-valid]="generos?.valid && generos?.touched"
+              id="generos"
+              formControlName="generos"
               placeholder="Géneros separadas por comas"
             />
-            @if (genero?.invalid && genero?.touched) {
+            @if (generos?.invalid && generos?.touched) {
             <div class="invalid-feedback">
-              @if (genero?.errors?.['required']) {
+              @if (generos?.errors?.['required']) {
                 <span>El campo género es obligatorio.</span>
               }
-              @if (genero?.errors?.['minlength']) {
-                <span>El campo género debe tener al menos 3 caracteres.</span>
+              @if (generos?.errors?.['minlength']) {
+                <span>Debe contener al menos 3 caracteres.</span>
               }
-              @if (genero?.errors?.['maxlength']) {
-                <span>El campo género no puede superar 100 caracteres.</span>
+              @if (generos?.errors?.['maxlength']) {
+                <span>No puede superar los 100 caracteres.</span>
               }
             </div>
             }
@@ -87,10 +112,10 @@
                 <span>El campo director es obligatorio.</span>
               }
               @if (director?.errors?.['minlength']) {
-                <span>El campo director debe tener al menos 3 caracteres.</span>
+                <span>Debe contener al menos 3 caracteres.</span>
               }
               @if (director?.errors?.['maxlength']) {
-                <span>El campo director no puede superar 100 caracteres.</span>
+                <span>No puede superar los 100 caracteres.</span>
               }
             </div>
             }
@@ -134,10 +159,10 @@
                 <span>El campo año es obligatorio.</span>
               }
               @if (anyo?.errors?.['min']) {
-                <span>El campo año no puede ser menor a 1901.</span>
+                <span>No puede ser inferior a 1901.</span>
               } @else {
                 @if (anyo?.errors?.['max']) {
-                  <span>El campo año no puede ser superior a 2155.</span>
+                  <span>No puede ser superior a 2155.</span>
                 } @else {
                   @if(anyo?.errors?.['pattern']){
                     <span>El campo año solo admite números enteros.</span>
@@ -146,6 +171,27 @@
               }
             </div>
             }
+          </div>
+          
+          <!-- Publicado -->
+          <div class="mb-4">
+            <div class="form-check form-switch">
+              <input
+                class="form-check-input"
+                type="checkbox"
+                role="switch"
+                id="publicado"
+                formControlName="publicado"
+              />
+              <label class="form-check-label" for="publicado">
+                @if(publicado?.value) {
+                  <i class="bi bi-eye me-1"></i>Despublicar película
+                } @else {
+                  <i class="bi bi-eye me-1"></i>Publicar película (visible para usuarios)
+                }
+              </label>
+            </div>
+            <small class="form-text text-muted">Si no se marca, el post permanecerá como borrador</small>
           </div>
 
           <!-- Botones -->

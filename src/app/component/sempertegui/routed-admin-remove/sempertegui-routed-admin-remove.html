@@ -1,6 +1,6 @@
-<div class="container my-5 remove-movie">
+<div class="container my-4 remove-post">
   <div class="row justify-content-center">
-    <div class="col-12 col-lg-10">
+    <div class="col-12 col-lg-8">
       @if (loading) {
       <div class="d-flex justify-content-center my-5">
         <div class="spinner-border text-primary" role="status">
@@ -13,16 +13,19 @@
       </div>
       } @if (!loading && !error && movie) {
 
-      <app-sempertegui-unrouted-admin-view [movie]="movie" [ocultarBtnVolver]="true"> </app-sempertegui-unrouted-admin-view>
-
-      <div class="confirm-box p-4 border rounded bg-light">
-        <h2 class="h5 mb-3">Confirmar borrado</h2>
-        <p class="text-muted mb-4">
-          ¿Seguro que deseas borrar ésta película de tu catálogo? Esta acción no se podrá deshacer.
+      <app-sempertegui-unrouted-admin-view [movie]="movie"> </app-sempertegui-unrouted-admin-view>
+      
+      <div class="confirm-box mt-4">
+        <h2 class="h5 mb-2">
+          <i class="bi bi-exclamation-triangle-fill"></i>
+          Confirmar borrado
+        </h2>
+        <p class="text-muted mb-3">
+          ¿Seguro que deseas borrar este post? Esta acción no se puede deshacer.
         </p>
         <div class="d-flex justify-content-between">
-          <button class="btn btn-outline-secondary" (click)="cancel()">
-            <i class="bi bi-arrow-left me-2"></i>Cancelar
+          <button class="btn btn-outline-secondary" (click)="goBack()">
+            Cancelar
           </button>
           <button class="btn btn-danger" [disabled]="deleting" (click)="confirmDelete()">
             @if (deleting) {

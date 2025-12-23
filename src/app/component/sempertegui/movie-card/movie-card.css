@@ -1,87 +1,174 @@
-/* Estilo base para el contenedor de la tarjeta */
+:host {
+  --primary: #e63946;
+  --dark: #1d3557;
+  --light-gray: #f8f9fa;
+  --text-muted: #6c757d;
+  /* --transition: all 0.3s ease; */
+}
+
 .movie-card {
-  display: flex; /* Para poner la portada y los detalles uno al lado del otro */
-  max-width: 700px;
-  margin: 20px auto; /* Centrar y separar las tarjetas */
-  border: 1px solid #ccc; /* Borde sutil */
-  border-radius: 8px; /* Bordes redondeados */
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Sombra para darle profundidad */
-  background-color: #fff;
-  overflow: hidden; /* Asegura que el contenido respete los bordes */
-}
-
-/* Estilos de la portada */
-.movie-cover {
-  flex: 0 0 200px; /* Ancho fijo para la imagen */
-  position: relative;
+  display: flex;
+  max-width: 750px;
+  margin: 30px auto;
+  background: #fff;
+  border-radius: 16px; /* Más redondeado = más moderno */
   overflow: hidden;
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.05);
+  /* transition: var(--transition); */
+  border: 1px solid rgba(0,0,0,0.05);
 }
 
-/* Estilos para el pie de la imagen (botones Trailer/Sinopsis) */
+/* .movie-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.12);
+} */
+
+/* Sección Portada */
+.movie-cover {
+  flex: 0 0 240px;
+  position: relative;
+  background: var(--light-gray);
+}
+
+.thumb {
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 50px;
+  color: #dee2e6;
+}
+
+.cover-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
 .cover-footer {
   display: flex;
   position: absolute;
   bottom: 0;
-  left: 0;
-  right: 0;
+  width: 100%;
+  backdrop-filter: blur(8px); /* Efecto cristalmerilado */
+  background: rgba(29, 53, 87, 0.8);
 }
 
-.cover-footer button {
+.footer-btn {
   flex: 1;
-  padding: 8px 0;
+  padding: 12px 5px;
   border: none;
-  cursor: pointer;
-  background-color: rgba(0, 0, 0, 0.7); /* Fondo oscuro transparente */
+  background: transparent;
   color: white;
-  font-weight: bold;
+  font-size: 0.85rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: var(--transition);
 }
 
-/* Estilos de los detalles */
+.footer-btn:hover {
+  background: rgba(255,255,255,0.1);
+}
+
+/* Detalles */
 .movie-details {
-  flex-grow: 1; /* Ocupa el espacio restante */
-  padding: 20px;
+  flex: 1;
+  padding: 25px;
   display: flex;
   flex-direction: column;
-  justify-content: space-between; /* Para empujar el botón "Ver más" hacia abajo */
+  justify-content: space-between;
+}
+
+.header-content {
+  display: flex;
+  align-items: center;
+  margin-bottom: 15px;
+  gap: 10px;
 }
 
 .movie-title {
-  color: #333;
-  margin-top: 0;
-  font-size: 1.8em;
-  border-bottom: 2px solid #eee;
-  padding-bottom: 10px;
+  font-size: 1.6rem;
+  font-weight: 800;
+  color: var(--dark);
+  margin: 0;
+  line-height: 1.2;
 }
 
-.movie-data {
-  color: #555;
-  font-style: italic;
+.movie-info-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 15px;
+  margin-bottom: 15px;
 }
 
-.movie-rating {
-  margin: 15px 0;
-  font-size: 1.1em;
-  color: gold; /* Color para las estrellas */
-  font-weight: bold;
+.info-item {
+  display: flex;
+  flex-direction: column;
+}
+
+.label {
+  font-size: 0.75rem;
+  text-transform: uppercase;
+  color: var(--text-muted);
+  letter-spacing: 0.5px;
+}
+
+.value {
+  font-weight: 600;
+  color: #444;
+}
+
+.movie-genres {
+  font-size: 0.9rem;
+  color: var(--text-muted);
+  margin-bottom: 20px;
+}
+
+/* Rating y Botón */
+.bottom-content {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding-top: 20px;
+  border-top: 1px solid #f1f1f1;
+}
+
+.stars {
+  color: #ffc107;
+  font-size: 1.2rem;
+}
+
+.rating-value {
+  font-weight: 800;
+  font-size: 1.2rem;
+  color: var(--dark);
+  margin-left: 5px;
+}
+
+.rating-max {
+  color: var(--text-muted);
+  font-size: 0.8rem;
 }
 
 .read-more-btn {
-  /* Estilo similar al botón rojo de la imagen de la película */
-  padding: 10px 15px;
-  background-color: #e63946; /* Rojo vibrante */
+  text-decoration: none;
+  padding: 10px 20px;
+  background: var(--primary);
   color: white;
   border: none;
-  border-radius: 4px;
+  border-radius: 10px;
+  font-weight: 600;
   cursor: pointer;
-  font-size: 1.1em;
-  margin-top: 20px; /* Separación del contenido de arriba */
+  transition: var(--transition);
 }
 
 .read-more-btn:hover {
-  background-color: #d62839;
+  background: #c92a35;
+  box-shadow: 0 4px 12px rgba(230, 57, 70, 0.3);
 }
 
-.thumb i {
+
+/* .thumb i {
 	width: 200px;
 	height: 300px;
 	display: flex;
@@ -90,6 +177,4 @@
 	font-size: 44px;
 	border-radius: 8px;
 	border:1px solid rgba(0,0,0,0.06);
-	background:#f8f9fa;
-	color:#111;
-}
+} */

@@ -1,24 +1,56 @@
 <div class="movie-card">
   <div class="movie-cover">
-    <div class="thumb me-3" aria-hidden>
+    <div class="thumb" aria-hidden="true">
+      <!-- @if (movie.imagen) {
+        <img [src]="movie.imagen" [alt]="movie.titulo" class="cover-img">
+      } @else {
+        <i class="bi bi-camera-reels-fill"></i>
+      } -->
       <i class="bi bi-camera-reels-fill" aria-hidden="true"></i>
     </div>
     <div class="cover-footer">
-      <button class="trailer-btn"><i class="bi bi-play"></i> Trailer</button>
-      <button class="synopsis-btn"><i class="bi bi-journal-text blog-icon me-2" aria-hidden="true"></i> Sinopsis</button>
+      <button class="footer-btn trailer"><i class="bi bi-play-fill me-1"></i>Trailer</button>
+      <button class="footer-btn synopsis" matButton (click)="openDialog()"><i class="bi bi-card-text me-1"></i>Sinopsis</button>
     </div>
   </div>
 
   <div class="movie-details">
-    <h3 class="movie-title">{{ movie.nombre }}</h3>
-    <span class="movie-data"><strong>Género:</strong> {{ movie.genero }}</span>
-    <span class="movie-data"><strong>Año:</strong> {{ movie.anyo }}</span>
-    <span class="movie-data"><strong>Director:</strong> {{ movie.director }}</span>
-    
-    <div class="movie-rating">
-      <span class="rating-value">⭐️ {{ movie.puntuacion }} / 100</span>
+    <div class="top-content">
+      <div class="header-content">
+        <h3 class="movie-title">{{ movie.titulo }}</h3>
+        @if(isSessionActive) {
+          @if(movie.publicado) {
+            <span class="badge rounded-pill bg-success px-3 fw-medium">Público</span>
+          } @else {
+            <span class="badge rounded-pill bg-secondary px-3 fw-medium">Oculto</span>
+          }
+        }
+      </div>
+      <div class="movie-info-grid">
+        <div class="info-item">
+          <span class="label">Director</span>
+          <span class="value">{{ movie.director }}</span>
+        </div>
+        <div class="info-item">
+          <span class="label">Año</span>
+          <span class="value">{{ movie.anyo }}</span>
+        </div>
+      </div>
+      <p class="movie-genres">
+        <i class="bi bi-tags me-1"></i>{{ movie.generos }}
+      </p>
     </div>
     
-    <button class="read-more-btn">Ver más detalles</button>
+    <div class="bottom-content">
+      <div class="movie-rating">
+        <!-- <span class="stars"><i class="bi bi-star-fill small"></i></span> -->
+        <span class="stars">★</span>
+        <span class="rating-value">{{ movie.puntuacion }}</span>
+        <span class="rating-max">/100</span>
+      </div>
+      <a [routerLink]="['/sempertegui/post', movie.id]" class="read-more-btn">
+        Ver detalles <i class="bi bi-arrow-right ms-1"></i>
+      </a>
+    </div>
   </div>
 </div>

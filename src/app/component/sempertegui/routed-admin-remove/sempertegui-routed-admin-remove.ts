@@ -1,9 +1,11 @@
 import { Component, OnInit, inject } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
+import { SemperteguiService } from '../../../service/sempertegui/sempertegui.service';
+import { IPelicula } from '../../../model/sempertegui/sempertegui.interface';
 import { HttpErrorResponse } from '@angular/common/http';
 import { SemperteguiUnroutedAdminView } from "../unrouted-admin-view/sempertegui-unrouted-admin-view";
-import { SemperteguiService } from '../../../service/sempertegui/semperteguiService';
-import { IPelicula } from '../../../model/sempertegui/semperteguiInterface';
+import { MatSnackBar } from '@angular/material/snack-bar';
+import { Location } from '@angular/common';
 
 @Component({
   selector: 'app-sempertegui-routed-admin-remove',
@@ -15,6 +17,8 @@ export class SemperteguiRoutedAdminRemove implements OnInit {
   private route = inject(ActivatedRoute);
   private router = inject(Router);
   private semperteguiService = inject(SemperteguiService);
+  private snackBar = inject(MatSnackBar);
+  private location = inject(Location)
 
   movie: IPelicula | null = null;
   loading: boolean = true;
@@ -23,22 +27,22 @@ export class SemperteguiRoutedAdminRemove implements OnInit {
 
   ngOnInit(): void {
     const id = this.route.snapshot.paramMap.get('id');
-    if (!id) {
-      this.error = 'ID no válido';
-      this.loading = false;
-      return;
+    if (id) {
+        this.getMovie(+id);
+    } else {
+        this.error = 'ID de película no válido';
+        this.loading = false;
     }
-    this.load(+id);
   }
 
-  load(id: number) {
+  getMovie(id: number) {
     this.semperteguiService.get(id).subscribe({
       next: (data: IPelicula) => {
         this.movie = data;
         this.loading = false;
       },
       error: (err: HttpErrorResponse) => {
-        this.error = 'Error cargando la película';
+        this.error = 'Error cargando el registro';
         this.loading = false;
         console.error(err);
       }
@@ -51,17 +55,19 @@ export class SemperteguiRoutedAdminRemove implements OnInit {
     this.semperteguiService.delete(this.movie.id).subscribe({
       next: () => {
         this.deleting = false;
+        this.snackBar.open('Registro borrado correctamente', 'Cerrar', { duration: 3000 });
         this.router.navigate(['/sempertegui/plist']);
       },
       error: (err: HttpErrorResponse) => {
         this.deleting = false;
         this.error = 'Error borrando el post';
+        this.snackBar.open('Error al borrar el registro', 'Cerrar', { duration: 4000 });
         console.error(err);
       }
     });
   }
 
-  cancel() {
-    this.router.navigate(['/sempertegui/plist']);
+  goBack() {
+    this.location.back();
   }
 }
