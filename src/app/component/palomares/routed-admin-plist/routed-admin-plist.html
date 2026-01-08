@@ -3,9 +3,12 @@
     <h1>Mantenimiento de Tareas Pendientes</h1>
   </div>
 
-  <div class="d-flex justify-content-center my-3">
+  <div class="d-flex justify-content-center gap-2 my-3">
     <a [routerLink]="['/palomares/new']" class="btn btn-success btn-sm">
       <i class="bi bi-plus-circle me-2"></i>Crear una nueva Tarea
+    </a>
+    <a [routerLink]="['/palomares']" class="btn btn-outline-info btn-sm">
+      <i class="bi bi-person-circle me-2"></i>Vista de Usuario
     </a>
   </div>
 
@@ -41,20 +44,30 @@
           } Generar
         </button>
 
-        @if (rellenaOk) {
+        <button
+          class="btn btn-danger btn-sm position-relative"
+          [disabled]="emptying"
+          (click)="openEmptyConfirm()"
+          title="Vaciar tabla"
+        >
+          @if (emptying) {
+          <span
+            class="spinner-border spinner-border-sm me-2"
+            role="status"
+            aria-hidden="true"
+          ></span>
+          } @if (!emptying) {
+          <i class="bi bi-trash me-2"></i>
+          } Vaciar tabla
+        </button>
         <div class="text-success small d-flex align-items-center">
-          <i class="bi bi-check-circle me-1"></i>{{ rellenaOk }} tareas
+          <i class="bi bi-check-circle me-1"></i>Registros: {{ totalElementsCount }}
         </div>
-        } @if (rellenaError) {
-        <div class="text-danger small d-flex align-items-center">
-          <i class="bi bi-exclamation-triangle me-1"></i>{{ rellenaError }}
-        </div>
-        }
       </div>
     </div>
   </div>
 
-  <div class="d-flex justify-content-between my-1">
+  <div class="d-flex justify-content-between my-1" [hidden]="totalElementsCount === 0">
     <app-paginacion
       [numPage]="numPage"
       [numPages]="oPage?.totalPages || 1"
@@ -65,29 +78,80 @@
     <app-botonera-rpp [numRpp]="numRpp" (rppChange)="onRppChange($event)"> </app-botonera-rpp>
   </div>
 
-  @if (oPage && debugging) {
-  <!-- DEBUG INFO -->
-  <div class="alert alert-info my-2">
-    <strong>🔍 Debug Info:</strong><br />
-    oPage existe: {{ oPage ? 'Sí' : 'No' }}<br />
-    Total elementos: {{ oPage.totalElements }}<br />
-    Total páginas: {{ oPage.totalPages }}<br />
-    Elementos en content: {{ oPage.content.length }}<br />
-    Content es array: {{ oPage.content ? 'Sí' : 'No' }}
-  </div>
-  }
-
-  <div class="d-flex justify-content-center">
+  <div class="d-flex justify-content-center" [hidden]="totalElementsCount === 0">
     <table class="table table-striped table-bordered">
       <thead>
         <tr>
-          <th scope="col">ID</th>
-          <th scope="col">Título</th>
-          <th scope="col">Categoría</th>
-          <th scope="col">Completada</th>
-          <th scope="col">Publicado</th>
-          <th scope="col">Creación</th>
-          <th scope="col">Actualización</th>
+          <th scope="col" class="cursor-pointer user-select-none" (click)="onOrder('id')">
+            ID
+            @if (orderField === 'id') {
+              @if (orderDirection === 'asc') {
+                <i class="bi bi-caret-up-fill"></i>
+              } @else {
+                <i class="bi bi-caret-down-fill"></i>
+              }
+            }
+          </th>
+          <th scope="col" class="cursor-pointer user-select-none" (click)="onOrder('titulo')">
+            Título
+            @if (orderField === 'titulo') {
+              @if (orderDirection === 'asc') {
+                <i class="bi bi-caret-up-fill"></i>
+              } @else {
+                <i class="bi bi-caret-down-fill"></i>
+              }
+            }
+          </th>
+          <th scope="col" class="cursor-pointer user-select-none" (click)="onOrder('categoria')">
+            Categoría
+            @if (orderField === 'categoria') {
+              @if (orderDirection === 'asc') {
+                <i class="bi bi-caret-up-fill"></i>
+              } @else {
+                <i class="bi bi-caret-down-fill"></i>
+              }
+            }
+          </th>
+          <th scope="col" class="cursor-pointer user-select-none" (click)="onOrder('completada')">
+            Completada
+            @if (orderField === 'completada') {
+              @if (orderDirection === 'asc') {
+                <i class="bi bi-caret-up-fill"></i>
+              } @else {
+                <i class="bi bi-caret-down-fill"></i>
+              }
+            }
+          </th>
+          <th scope="col" class="cursor-pointer user-select-none" (click)="onOrder('publicado')">
+            Publicado
+            @if (orderField === 'publicado') {
+              @if (orderDirection === 'asc') {
+                <i class="bi bi-caret-up-fill"></i>
+              } @else {
+                <i class="bi bi-caret-down-fill"></i>
+              }
+            }
+          </th>
+          <th scope="col" class="cursor-pointer user-select-none" (click)="onOrder('fechaCreacion')">
+            Creación
+            @if (orderField === 'fechaCreacion') {
+              @if (orderDirection === 'asc') {
+                <i class="bi bi-caret-up-fill"></i>
+              } @else {
+                <i class="bi bi-caret-down-fill"></i>
+              }
+            }
+          </th>
+          <th scope="col" class="cursor-pointer user-select-none" (click)="onOrder('fechaModificacion')">
+            Actualización
+            @if (orderField === 'fechaModificacion') {
+              @if (orderDirection === 'asc') {
+                <i class="bi bi-caret-up-fill"></i>
+              } @else {
+                <i class="bi bi-caret-down-fill"></i>
+              }
+            }
+          </th>
           <th scope="col">Operaciones</th>
         </tr>
       </thead>
@@ -129,6 +193,33 @@
               <a [routerLink]="['/palomares/remove', oPalomares.id]" class="btn btn-outline-danger">
                 <i class="bi bi-trash"></i>
               </a>
+              @if (oPalomares.publicado) {
+              <button 
+                class="btn btn-outline-warning" 
+                (click)="despublicar(oPalomares.id)"
+                [disabled]="publishingId === oPalomares.id"
+                title="Despublicar tarea"
+              >
+                @if (publishingId === oPalomares.id && publishingAction === 'despublicar') {
+                <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+                } @else {
+                <i class="bi bi-eye-slash"></i>
+                }
+              </button>
+              } @else {
+              <button 
+                class="btn btn-outline-success" 
+                (click)="publicar(oPalomares.id)"
+                [disabled]="publishingId === oPalomares.id"
+                title="Publicar tarea"
+              >
+                @if (publishingId === oPalomares.id && publishingAction === 'publicar') {
+                <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+                } @else {
+                <i class="bi bi-eye"></i>
+                }
+              </button>
+              }
             </div>
           </td>
         </tr>

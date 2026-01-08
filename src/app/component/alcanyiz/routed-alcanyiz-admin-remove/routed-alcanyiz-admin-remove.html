@@ -15,24 +15,15 @@
 
       <app-unrouted-alcanyiz-admin-view [oQuestion]="oQuestion"> </app-unrouted-alcanyiz-admin-view>
 
-      <div class="remove-section">
+      <div class="border rounded p-3 mt-3">
         <h2 class="h5 mb-3">Confirmar borrado</h2>
-        <p class="mb-4">
-          ¿Seguro que deseas borrar este post? Esta acción no se puede deshacer.
-        </p>
-        <div class="d-flex justify-content-between">
-          <button class="btn-cancel-remove" (click)="cancel()">
+
+        <div class="d-flex gap-2">
+          <button class="btn btn-outline-secondary" (click)="cancel()">
             <i class="bi bi-arrow-left me-2"></i>Cancelar
           </button>
-          <button class="btn-remove" [disabled]="deleting" (click)="confirmDelete()">
-            @if (deleting) {
-            <span
-              class="spinner-border spinner-border-sm me-2"
-              role="status"
-              aria-hidden="true"
-            ></span>
-            } @if (!deleting) {
-            } Borrar Pregunta
+          <button class="btn btn-danger" [disabled]="deleting" (click)="confirmDelete()">
+            <i class="bi bi-trash me-2"></i>Borrar Pregunta
           </button>
         </div>
       </div>

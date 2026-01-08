@@ -6,23 +6,30 @@
       </h1>
     </div>
 
-    <div class="d-flex align-items-center mt-2 mt-md-0">
+    <div class="d-flex align-items-center mt-2 mt-md-0 gap-2">
       <a
-        class="p-3 d-inline"  style="background-color: white; color: black; text-decoration: none; border-radius: 5px;"
-        href="/alcanyiz/questionlist"
+        class="btn btn-outline-primary btn-sm"
+        [routerLink]="['/alcanyiz/questionlist']"
+        role="button"
         title="Mantenimiento del blog"
       >
-        <!-- gear icon -->
         Mantenimiento
       </a>
-      <!-- small screens: compact maintenance icon-only button -->
+      <a [routerLink]="['/alcanyiz']" class="btn btn-outline-primary btn-sm" role="button">Volver al menú</a>
     </div>
   </div>
+  @if(totalElementsCount === 0){
+    <div class="alert alert-info" role="alert">
+      <i class="bi bi-info-circle me-2"></i>No hay preguntas disponibles.
+    </div>
+  }
+  <div>
 
-  <div class="list">
+  </div>
+  <div class="list mt-5">
     <div class="alc-list-container">
-      <div *ngFor="let oQuestion of oPage?.content" class="post-row mt-4">
-        <div class="post-item">
+      <div *ngFor="let oQuestion of oPage?.content" class="post-row d-flex justify-content-center mt-2">
+        <div class="post-item tarjeta-pregunta">
           <div class="post-card">
             <app-unrouted-alcanyiz-user-view2 [oQuestion]="oQuestion"> </app-unrouted-alcanyiz-user-view2>
           </div>
@@ -32,13 +39,14 @@
   </div>
 
   <div class="d-flex justify-content-center mt-5">
-
+      @if (2 < totalElementsCount ){
       <app-paginacion
         [numPage]="numPage"
         [numPages]="oPage?.totalPages || 1"
         (pageChange)="goToPage($event)"
       >
       </app-paginacion>
+    }
     </div>
 
 </div>

@@ -7,5 +7,6 @@ export interface IAlcalde {
   valoracion: number
   publicado: boolean
   destacado: boolean
-  fechaLectura: string
+  fechaCreacion: string
+  fechaModificacion: string
 }

@@ -4,6 +4,7 @@ import { PalomaresService } from '../../../service/palomares';
 import { ActivatedRoute } from '@angular/router';
 import { HttpErrorResponse } from '@angular/common/http';
 import { UnroutedAdminView } from "../unrouted-admin-view/unrouted-admin-view";
+import { debug } from '../../../environment/environment';
 
 @Component({
   selector: 'app-routed-admin-view',
@@ -13,19 +14,18 @@ import { UnroutedAdminView } from "../unrouted-admin-view/unrouted-admin-view";
 })
 export class RoutedAdminView {
   oPalomares: IPalomares | null = null;
+  debugging: boolean = debug;
 
   constructor(private oPalomaresService: PalomaresService, private route: ActivatedRoute) {
     // Obtener el ID de la tarea desde la ruta
     const idParam = this.route.snapshot.paramMap.get('id');
     const tareaId = idParam ? Number(idParam) : NaN;
     if (isNaN(tareaId)) {
-      console.error('Invalid tarea id:', idParam);
+      this.debugging && console.error('Invalid tarea id:', idParam);
       return;
     }
     this.getPalomares(tareaId);
   }
-
-  ngOnInit() { }
 
   getPalomares(tareaId: number) {
     this.oPalomaresService.get(tareaId).subscribe({
@@ -33,7 +33,7 @@ export class RoutedAdminView {
         this.oPalomares = data;
       },
       error: (error: HttpErrorResponse) => {
-        console.error('Error fetching tarea:', error);
+        this.debugging && console.error('Error fetching tarea:', error);
       },
     });
   }

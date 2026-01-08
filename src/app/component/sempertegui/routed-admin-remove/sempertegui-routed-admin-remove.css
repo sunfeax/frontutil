@@ -1,13 +1,56 @@
-.remove-movie .confirm-box {
-  background: #f8f9fa;
-  border: 1px solid #e5e7eb;
+
+.remove-post .confirm-box {
+  background: #fff3cd;
+  border: 1px solid #ffc107;
+  border-left: 4px solid #ffc107;
   border-radius: 12px;
+  padding: 1.5rem;
+  box-shadow: 0 4px 6px rgba(255, 193, 7, 0.1);
 }
 
-.remove-movie .confirm-box h2 {
+.remove-post .confirm-box h2 {
+  font-weight: 600;
+  color: #856404;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: 1rem;
+  margin: 0;
+}
+
+.remove-post .confirm-box p {
+  color: #856404;
+  font-size: 0.95rem;
+  margin: 0;
+}
+
+.remove-post .btn {
+  border-radius: 8px;
   font-weight: 500;
+  padding: 0.5rem 1rem;
 }
 
-.remove-movie .btn-danger {
-  box-shadow: 0 2px 4px rgba(220, 53, 69, 0.3);
+.remove-post .btn-danger {
+  box-shadow: 0 2px 4px rgba(220, 53, 69, 0.2);
+}
+
+.remove-post .btn-danger:hover {
+  box-shadow: 0 4px 8px rgba(220, 53, 69, 0.3);
+  transform: translateY(-1px);
+  transition: all 0.2s ease;
+}
+
+@media (max-width: 768px) {
+  .remove-post .confirm-box {
+    padding: 1.25rem;
+  }
+  
+  .remove-post .d-flex.justify-content-between {
+    flex-direction: column;
+    gap: 0.75rem;
+  }
+  
+  .remove-post .btn {
+    width: 100%;
+  }
 }

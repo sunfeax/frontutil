@@ -17,6 +17,7 @@ export class RoutedAlfonsoAdminNew implements OnInit {
   private service = inject(AlfonsoRespuestaService);
 
   form!: FormGroup;
+  get blogForm() { return this.form; } // usado por PendingChangesGuard
   error: string | null = null;
   submitting: boolean = false;
 
@@ -68,5 +69,12 @@ export class RoutedAlfonsoAdminNew implements OnInit {
 
   get publicado() {
     return this.form.get('publicado');
+  }
+
+  canDeactivate(): boolean {
+    if (this.form && this.form.dirty) {
+      return confirm('Hay cambios sin guardar. ¿Salir sin guardar?');
+    }
+    return true;
   }
 }

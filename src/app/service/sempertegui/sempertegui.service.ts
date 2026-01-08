@@ -2,7 +2,7 @@ import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { serverURL } from '../../environment/environment';
 import { IPage } from '../../model/plist';
-import { IPelicula } from '../../model/sempertegui/semperteguiInterface';
+import { IPelicula } from '../../model/sempertegui/sempertegui.interface';
 import { Observable } from 'rxjs';
 
 @Injectable({
@@ -38,8 +38,20 @@ export class SemperteguiService {
     return this.httpClient.delete<number>(`${serverURL}/sempertegui/${id}`);
   }
 
-  rellenaPeliculas(): Observable<number> {
-    return this.httpClient.get<number>(`${serverURL}/sempertegui/rellena`);
+  rellenaPeliculas(numPosts: number): Observable<number> {
+    return this.httpClient.get<number>(`${serverURL}/sempertegui/rellena/${numPosts}`);
+  }
+
+  empty(): Observable<number> {
+    return this.httpClient.delete<number>(serverURL + '/sempertegui/empty');
+  }
+
+  publicar(id: number): Observable<number> {
+    return this.httpClient.put<number>(`${serverURL}/sempertegui/publicar/${id}`, {});
+  }
+
+  despublicar(id: number): Observable<number> {
+    return this.httpClient.put<number>(`${serverURL}/sempertegui/despublicar/${id}`, {});
   }
 
   count(): Observable<number> {

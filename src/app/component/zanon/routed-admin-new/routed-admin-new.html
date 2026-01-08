@@ -3,8 +3,8 @@
     <div class="col-12 col-lg-8">
       <div class="form-card">
         <header class="form-header mb-4">
-          <h1 class="form-title">CREAR una NUEVA RUTINA</h1>
-          <p class="text-muted small">Rellena los campos OBLIGATORIOS para crear una NUEVA RUTINA</p>
+          <h1 class="form-title">Crea una nueva rutina</h1>
+          <p class="text-muted small">Rellena los campos obligatorios (*)</p>
         </header>
 
         @if (error) {
@@ -24,7 +24,7 @@
               [class.is-valid]="titulo?.valid && titulo?.touched"
               id="titulo"
               formControlName="titulo"
-              placeholder="Introduce un TÍTULO"
+              placeholder="Introduce un título para la rutina"
             />
             @if (titulo?.invalid && titulo?.touched) {
             <div class="invalid-feedback">
@@ -51,7 +51,7 @@
               id="contenido"
               formControlName="contenido"
               rows="8"
-              placeholder="Escribe el CONTENIDO"
+              placeholder="Escribe el contenido de la rutina"
             ></textarea>
             @if (contenido?.invalid && contenido?.touched) {
             <div class="invalid-feedback">
@@ -75,7 +75,7 @@
               [class.is-valid]="etiquetas?.valid && etiquetas?.touched"
               id="etiquetas"
               formControlName="etiquetas"
-              placeholder="Escribe PALABRAS SUELTAS del CONTENIDO (separadas por comas)"
+              placeholder="Escribe palabras sueltas del contenido"
             />
             @if (etiquetas?.invalid && etiquetas?.touched) {
             <div class="invalid-feedback">
@@ -97,7 +97,7 @@
               [class.is-valid]="duracion?.valid && duracion?.touched"
               id="duracion"
               formControlName="duracion"
-              placeholder="Introduce un NÚMERO"
+              placeholder="Introduce un número para establecer una duración de la rutina"
             />
             @if (duracion?.invalid && duracion?.touched) {
             <div class="invalid-feedback">
@@ -156,6 +156,27 @@
                   <span>Debe indicar si la rutina es pública o no.</span>
                 }
               </div>
+            }
+          </div>
+
+          <!-- Imagen -->
+          <div class="mb-4">
+            <label for="imagen" class="form-label">Imagen <span class="text-danger">*</span></label>
+            <input
+              type="text"
+              class="form-control"
+              [class.is-invalid]="imagen?.invalid && imagen?.touched"
+              [class.is-valid]="imagen?.valid && imagen?.touched"
+              id="imagen"
+              formControlName="imagen"
+              placeholder="Introduce la url de una imagen"
+            />
+            @if (imagen?.invalid && imagen?.touched) {
+            <div class="invalid-feedback">
+              @if (titulo?.errors?.['required']) {
+                <span>El título es obligatorio.</span>
+              }
+            </div>
             }
           </div>
 

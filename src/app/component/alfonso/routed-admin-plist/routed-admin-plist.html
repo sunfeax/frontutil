@@ -3,10 +3,28 @@
     <h1>Mantenimiento Encuesta (Alfonso)</h1>
   </div>
 
-  <div class="d-flex justify-content-center my-3">
+  <div class="d-flex justify-content-center my-3 gap-2">
     <a [routerLink]="['/alfonso/new']" class="btn btn-success btn-sm">
       <i class="bi bi-plus-circle me-2"></i>Nueva respuesta
     </a>
+    <button class="btn btn-outline-danger btn-sm" [disabled]="emptying" (click)="emptyTable()">
+      @if (emptying) { <span class="spinner-border spinner-border-sm me-2"></span> } Vaciar tabla
+    </button>
+  </div>
+
+  <div class="card shadow-sm p-3 mb-3">
+    <div class="d-flex flex-wrap align-items-center gap-3">
+      <div class="flex-grow-1">
+        <label class="form-label mb-1" for="filterInput">Filtro (autor o contenido)</label>
+        <div class="input-group input-group-sm">
+          <input id="filterInput" type="text" class="form-control" [value]="filter" (input)="onFilterChange(filterInput.value)" #filterInput>
+          <button class="btn btn-outline-secondary" (click)="applyFilter()">Filtrar</button>
+        </div>
+      </div>
+      <div class="text-muted small">
+        Total: {{ totalRegistros || 0 }} | Filtrados: {{ oPage?.totalElements || 0 }}
+      </div>
+    </div>
   </div>
 
   <div class="d-flex justify-content-center my-3">
@@ -48,6 +66,10 @@
     </div>
   </div>
 
+  @if (statusMsg) {
+    <div class="alert alert-info py-1">{{ statusMsg }}</div>
+  }
+
   <div class="d-flex justify-content-between my-1 align-items-center gap-2">
     <app-paginacion
       [numPage]="numPage"
@@ -59,10 +81,10 @@
     <div class="d-flex gap-2 align-items-center">
       <span class="text-muted small">Ordenar por:</span>
       <button class="btn btn-outline-secondary btn-sm" (click)="toggleOrder('id')">
-        ID {{ order === 'id' ? (direction === 'asc' ? '↑' : '↓') : '' }}
+        ID {{ order === 'id' ? (direction === 'asc' ? '(asc)' : '(desc)') : '' }}
       </button>
       <button class="btn btn-outline-secondary btn-sm" (click)="toggleOrder('fechaCreacion')">
-        Creaci&oacute;n {{ order === 'fechaCreacion' ? (direction === 'asc' ? '↑' : '↓') : '' }}
+        Creacion {{ order === 'fechaCreacion' ? (direction === 'asc' ? '(asc)' : '(desc)') : '' }}
       </button>
     </div>
 
@@ -76,8 +98,8 @@
           <th scope="col">ID</th>
           <th scope="col">Autor</th>
           <th scope="col">Publicado</th>
-          <th scope="col">Creaci&oacute;n</th>
-          <th scope="col">Actualizaci&oacute;n</th>
+          <th scope="col">Creacion</th>
+          <th scope="col">Actualizacion</th>
           <th scope="col">Operaciones</th>
         </tr>
       </thead>
@@ -101,6 +123,9 @@
               <a [routerLink]="['/alfonso/edit', item.id]" class="btn btn-outline-secondary">
                 <i class="bi bi-pencil-square"></i>
               </a>
+              <button class="btn btn-outline-success" (click)="togglePublicado(item)" title="Publicar/Despublicar">
+                <i class="bi bi-toggle-on"></i>
+              </button>
               <a [routerLink]="['/alfonso/remove', item.id]" class="btn btn-outline-danger">
                 <i class="bi bi-trash"></i>
               </a>

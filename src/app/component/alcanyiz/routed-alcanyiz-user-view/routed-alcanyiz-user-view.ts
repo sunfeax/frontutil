@@ -16,11 +16,10 @@ export class RoutedAlcanyizUserView {
   oQuestion: questionModel | null = null;
 
   constructor(private oQuestionService: jsQuestionService, private route: ActivatedRoute) {
-    // Obtener el ID del blog desde la ruta
     const idParam = this.route.snapshot.paramMap.get('id');
     const questionId = idParam ? Number(idParam) : NaN;
     if (isNaN(questionId)) {
-      console.error('Invalid blog id:', idParam);
+      console.error('Invalid question id:', idParam);
       return;
     }
     this.getQuestion(questionId);

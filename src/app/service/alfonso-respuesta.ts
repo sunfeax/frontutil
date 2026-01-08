@@ -12,8 +12,12 @@ export class AlfonsoRespuestaService {
 
   constructor(private oHttp: HttpClient) { }
 
-  getPage(page: number, rpp: number, order: string = 'id', direction: string = 'asc'): Observable<IPage<IAlfonsoRespuesta>> {
-    return this.oHttp.get<IPage<IAlfonsoRespuesta>>(serverURL + `/alfonsorespuesta?page=${page}&size=${rpp}&sort=${order},${direction}`);
+  getPage(page: number, rpp: number, order: string = 'id', direction: string = 'asc', filter: string = ''): Observable<IPage<IAlfonsoRespuesta>> {
+    const params = [`page=${page}`, `size=${rpp}`, `sort=${order},${direction}`];
+    if (filter) {
+      params.push(`filter=${encodeURIComponent(filter)}`);
+    }
+    return this.oHttp.get<IPage<IAlfonsoRespuesta>>(serverURL + `/alfonsorespuesta?${params.join('&')}`);
   }
 
   get(id: number): Observable<IAlfonsoRespuesta> {
@@ -36,7 +40,23 @@ export class AlfonsoRespuestaService {
     return this.oHttp.get<number>(serverURL + '/alfonsorespuesta/rellena/' + cantidad);
   }
 
+  empty(): Observable<number> {
+    return this.oHttp.delete<number>(serverURL + '/alfonsorespuesta/empty');
+  }
+
+  publicar(id: number): Observable<number> {
+    return this.oHttp.put<number>(serverURL + '/alfonsorespuesta/publicar/' + id, {});
+  }
+
+  despublicar(id: number): Observable<number> {
+    return this.oHttp.put<number>(serverURL + '/alfonsorespuesta/despublicar/' + id, {});
+  }
+
   count(): Observable<number> {
     return this.oHttp.get<number>(serverURL + '/alfonsorespuesta/count');
+  }
+
+  countVisible(): Observable<number> {
+    return this.oHttp.get<number>(serverURL + '/alfonsorespuesta/count/visible');
   }
 }

@@ -4,10 +4,11 @@ import { questionModel } from '../../../model/alcanyiz/questionsModel_Alan';
 import { jsQuestionService } from '../../../service/alcanyiz/jsquestions';
 import { ActivatedRoute, Router } from '@angular/router';
 import { UnroutedAlcanyizAdminView } from "../unrouted-alcanyiz-admin-view/unrouted-alcanyiz-admin-view";
+import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
 
 @Component({
   selector: 'app-routed-alcanyiz-admin-remove',
-  imports: [UnroutedAlcanyizAdminView],
+  imports: [UnroutedAlcanyizAdminView, MatSnackBarModule],
   templateUrl: './routed-alcanyiz-admin-remove.html',
   styleUrl: './routed-alcanyiz-admin-remove.css',
 })
@@ -15,6 +16,7 @@ export class RoutedAlcanyizAdminRemove {
   private route = inject(ActivatedRoute);
   private router = inject(Router);
   private questionService = inject(jsQuestionService);
+  private snackBar = inject(MatSnackBar);
 
   oQuestion: questionModel | null = null;
   loading: boolean = true;
@@ -38,7 +40,7 @@ export class RoutedAlcanyizAdminRemove {
         this.loading = false;
       },
       error: (err: HttpErrorResponse) => {
-        this.error = 'Error cargando el post';
+        this.error = 'Error cargando la pregunta';
         this.loading = false;
         console.error(err);
       }
@@ -51,11 +53,13 @@ export class RoutedAlcanyizAdminRemove {
     this.questionService.delete(this.oQuestion.id).subscribe({
       next: () => {
         this.deleting = false;
+        this.snackBar.open('Pregunta borrada correctamente', 'Cerrar', { duration: 3000 });
         this.router.navigate(['/alcanyiz/questionlist']);
       },
       error: (err: HttpErrorResponse) => {
         this.deleting = false;
-        this.error = 'Error borrando el post';
+        this.error = 'Error al borrar la pregunta';
+        this.snackBar.open('Error al borrar la pregunta', 'Cerrar', { duration: 4000 });
         console.error(err);
       }
     });

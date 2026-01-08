@@ -3,8 +3,8 @@ export interface IPalomares {
   titulo: string
   descripcion: string
   categoria: string
-  completada: boolean
-  publicado: boolean
+  completada: boolean | number
+  publicado: boolean | number
   fechaCreacion: string
   fechaModificacion: string
 }

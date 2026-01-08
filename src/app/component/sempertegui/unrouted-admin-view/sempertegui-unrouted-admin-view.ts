@@ -1,5 +1,5 @@
 import { Component, Input } from '@angular/core';
-import { IPelicula } from '../../../model/sempertegui/semperteguiInterface';
+import { IPelicula } from '../../../model/sempertegui/sempertegui.interface';
 
 @Component({
   selector: 'app-sempertegui-unrouted-admin-view',
@@ -9,5 +9,4 @@ import { IPelicula } from '../../../model/sempertegui/semperteguiInterface';
 })
 export class SemperteguiUnroutedAdminView {
   @Input() movie: IPelicula | null = null;
-  @Input() ocultarBtnVolver?: boolean = false;
 }

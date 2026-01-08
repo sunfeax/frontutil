@@ -97,7 +97,7 @@ export class UskiAdminEditPage implements OnInit {
     this.visitasService.update(payload).subscribe({
       next: () => {
         this.submitting = false;
-        this.snackBar.open('Registro actualizado correctamente', 'Cerrar', { duration: 3000 });
+        this.snackBar.open('Registro actualizado correctamente', 'Cerrar', { duration: 4000 });
         if (this.visitaForm) {
           this.visitaForm.markAsPristine();
         }

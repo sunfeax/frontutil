@@ -1,22 +1,25 @@
 <div class="container my-3">
   <div class="text-center mb-4">
     <h1 class="display-6">Mantenimiento de lecturas</h1>
-    <p class="text-muted">Controla la biblioteca de libros leidos y sus reseñas</p>
+    <p class="text-muted">Controla la biblioteca de libros leídos y sus reseñas</p>
   </div>
 
-  <div class="d-flex justify-content-center mb-3">
+  <div class="d-flex justify-content-center mb-3 gap-2">
     <a [routerLink]="['/alcalde/new']" class="btn btn-success">
       <i class="bi bi-plus-circle me-2"></i>Registrar lectura
+    </a>
+    <a [routerLink]="['/alcalde']" class="btn btn-outline-primary">
+      <i class="bi bi-eye me-2"></i>Ver vista pública
     </a>
   </div>
 
   <div class="row g-3 mb-4">
-    <div class="col-12 col-lg-6">
+    <div class="col-12 col-lg-8">
       <div class="card shadow-sm h-100">
         <div class="card-body d-flex flex-column gap-3">
           <div class="d-flex align-items-center justify-content-between flex-wrap gap-2">
             <div>
-              <span class="fw-semibold">Filtro rapido</span>
+              <span class="fw-semibold">Filtro rápido</span>
               <p class="small text-muted mb-0">Alterna entre todos los registros o solo los publicados</p>
             </div>
             <button class="btn btn-outline-primary btn-sm" (click)="togglePublished()">
@@ -24,8 +27,8 @@
               <span class="ms-2">{{ onlyPublished ? 'Ver todos' : 'Solo publicados' }}</span>
             </button>
           </div>
-          <div class="d-flex align-items-center gap-3">
-            <label for="rellenaSelect" class="form-label m-0">Generar datos aleatorios</label>
+          <div class="d-flex align-items-center gap-3 flex-wrap">
+            <label for="rellenaSelect" class="form-label m-0">Generar datos:</label>
             <select #cantidadSel id="rellenaSelect" class="form-select form-select-sm w-auto" (change)="onCantidadChange(cantidadSel.value)">
               <option value="10">10</option>
               <option value="25" selected>25</option>
@@ -39,13 +42,23 @@
               }
               Generar
             </button>
+            <button class="btn btn-danger btn-sm" [disabled]="emptying" (click)="openEmptyConfirm()" title="Vaciar tabla">
+              @if (emptying) {
+                <span class="spinner-border spinner-border-sm me-2"></span>
+              } @else {
+                <i class="bi bi-trash me-2"></i>
+              }
+              Vaciar tabla
+            </button>
           </div>
-          <div class="small">
-            @if (rellenaOk !== null) {
-              <span class="text-success"><i class="bi bi-check-circle me-1"></i>{{ rellenaOk }} registros totales</span>
-            }
-            @if (rellenaError) {
-              <span class="text-danger"><i class="bi bi-exclamation-triangle me-1"></i>{{ rellenaError }}</span>
+          <div class="d-flex align-items-center gap-3">
+            <span class="text-success small">
+              <i class="bi bi-check-circle me-1"></i>Total registros: {{ totalElementsCount }}
+            </span>
+            @if (onlyPublished && oPage?.totalElements !== undefined) {
+              <span class="text-info small">
+                <i class="bi bi-funnel me-1"></i>Filtrados: {{ oPage?.totalElements }}
+              </span>
             }
           </div>
         </div>
@@ -53,24 +66,55 @@
     </div>
   </div>
 
-  <div class="d-flex justify-content-between align-items-center mb-2 flex-wrap gap-2">
+  <div class="d-flex justify-content-between align-items-center mb-2 flex-wrap gap-2" [hidden]="totalElementsCount === 0">
     <app-paginacion [numPage]="numPage" [numPages]="oPage?.totalPages || 1" (pageChange)="goToPage($event)"></app-paginacion>
     <app-botonera-rpp [numRpp]="numRpp" (rppChange)="onRppChange($event)"></app-botonera-rpp>
   </div>
 
-  <div class="table-responsive">
+  @if (totalElementsCount === 0) {
+    <div class="alert alert-info text-center">
+      <i class="bi bi-info-circle me-2"></i>No hay lecturas registradas. Puedes generar datos de prueba o registrar una nueva lectura.
+    </div>
+  }
+
+  <div class="table-responsive" [hidden]="totalElementsCount === 0">
     <table class="table table-striped table-hover">
       <thead>
         <tr>
-          <th (click)="changeSort('id')">ID <i class="bi" [class.bi-sort-down]="order==='id' && direction==='desc'" [class.bi-sort-up]="order==='id' && direction==='asc'"></i></th>
-          <th (click)="changeSort('titulo')">Título <i class="bi" [class.bi-sort-down]="order==='titulo' && direction==='desc'" [class.bi-sort-up]="order==='titulo' && direction==='asc'"></i></th>
+          <th style="cursor: pointer" (click)="changeSort('id')">
+            ID 
+            @if (order === 'id') {
+              <i class="bi" [class.bi-caret-down-fill]="direction==='desc'" [class.bi-caret-up-fill]="direction==='asc'"></i>
+            }
+          </th>
+          <th style="cursor: pointer" (click)="changeSort('titulo')">
+            Título
+            @if (order === 'titulo') {
+              <i class="bi" [class.bi-caret-down-fill]="direction==='desc'" [class.bi-caret-up-fill]="direction==='asc'"></i>
+            }
+          </th>
           <th>Autor</th>
           <th>Género</th>
-          <th (click)="changeSort('valoracion')">Valoración</th>
-          <th>Lectura</th>
-          <th>Publicado</th>
-          <th>Seleccionado</th>
-          <th class="text-end">Opciones</th>
+          <th style="cursor: pointer" (click)="changeSort('valoracion')">
+            Valoración
+            @if (order === 'valoracion') {
+              <i class="bi" [class.bi-caret-down-fill]="direction==='desc'" [class.bi-caret-up-fill]="direction==='asc'"></i>
+            }
+          </th>
+          <th style="cursor: pointer" (click)="changeSort('fechaCreacion')">
+            Creación
+            @if (order === 'fechaCreacion') {
+              <i class="bi" [class.bi-caret-down-fill]="direction==='desc'" [class.bi-caret-up-fill]="direction==='asc'"></i>
+            }
+          </th>
+          <th style="cursor: pointer" (click)="changeSort('fechaModificacion')">
+            Actualización
+            @if (order === 'fechaModificacion') {
+              <i class="bi" [class.bi-caret-down-fill]="direction==='desc'" [class.bi-caret-up-fill]="direction==='asc'"></i>
+            }
+          </th>
+          <th>Estado</th>
+          <th class="text-end">Operaciones</th>
         </tr>
       </thead>
       <tbody>
@@ -81,18 +125,46 @@
             <td>{{ entrada.autor }}</td>
             <td>{{ entrada.genero }}</td>
             <td><span class="badge bg-primary">{{ entrada.valoracion }}/5</span></td>
-            <td>{{ entrada.fechaLectura }}</td>
-            <td>
-              <i class="bi" [class.bi-check-circle-fill]="entrada.publicado" [class.text-success]="entrada.publicado" [class.bi-x-circle]="!entrada.publicado"></i>
-            </td>
-            <td>
-              <i class="bi" [class.bi-star-fill]="entrada.destacado" [class.text-warning]="entrada.destacado" [class.bi-star]="!entrada.destacado"></i>
+            <td>{{ entrada.fechaCreacion | datetime }}</td>
+            <td>{{ entrada.fechaModificacion | datetime }}</td>
+            <td class="text-center">
+              @if (entrada.publicado) {
+                <span class="text-success"><i class="bi bi-check-circle-fill"></i></span>
+              } @else {
+                <span class="text-secondary"><i class="bi bi-x-circle-fill"></i></span>
+              }
+              @if (entrada.destacado) {
+                <span class="text-warning ms-1"><i class="bi bi-star-fill"></i></span>
+              }
             </td>
             <td class="text-end">
               <div class="btn-group btn-group-sm">
-                <a [routerLink]="['/alcalde/view', entrada.id]" class="btn btn-outline-primary"><i class="bi bi-eye"></i></a>
-                <a [routerLink]="['/alcalde/edit', entrada.id]" class="btn btn-outline-secondary"><i class="bi bi-pencil"></i></a>
-                <a [routerLink]="['/alcalde/remove', entrada.id]" class="btn btn-outline-danger"><i class="bi bi-trash"></i></a>
+                <a [routerLink]="['/alcalde/view', entrada.id]" class="btn btn-outline-primary" title="Ver">
+                  <i class="bi bi-eye"></i>
+                </a>
+                <a [routerLink]="['/alcalde/edit', entrada.id]" class="btn btn-outline-secondary" title="Editar">
+                  <i class="bi bi-pencil"></i>
+                </a>
+                @if (!entrada.publicado) {
+                  <button class="btn btn-outline-success" title="Publicar" [disabled]="publishingId === entrada.id" (click)="publicar(entrada.id)">
+                    @if (publishingId === entrada.id && publishingAction === 'publicar') {
+                      <span class="spinner-border spinner-border-sm"></span>
+                    } @else {
+                      <i class="bi bi-upload"></i>
+                    }
+                  </button>
+                } @else {
+                  <button class="btn btn-outline-warning" title="Despublicar" [disabled]="publishingId === entrada.id" (click)="despublicar(entrada.id)">
+                    @if (publishingId === entrada.id && publishingAction === 'despublicar') {
+                      <span class="spinner-border spinner-border-sm"></span>
+                    } @else {
+                      <i class="bi bi-eye-slash"></i>
+                    }
+                  </button>
+                }
+                <a [routerLink]="['/alcalde/remove', entrada.id]" class="btn btn-outline-danger" title="Eliminar">
+                  <i class="bi bi-trash"></i>
+                </a>
               </div>
             </td>
           </tr>

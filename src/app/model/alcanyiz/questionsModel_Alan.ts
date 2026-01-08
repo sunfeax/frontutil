@@ -6,6 +6,8 @@ export interface questionModel{
   answer3: string;
   answer4: string;
   correct: number;
+  publicado: boolean;
+  tema: string;
   create_date: string
   modify_date: any;
 }

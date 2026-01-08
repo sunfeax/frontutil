@@ -1,54 +1,77 @@
-<!-- crear la tabla con movie -->
-<div class="container my-4 edit-form">
-  <div class="row justify-content-center">
-    <div class="col-12 col-lg-8">
-      <div class="form-card">
-        <h1 class="my-5 text-center">Detalles de la Película</h1>
-
-        <table class="table">
-          <thead>
-            <tr>
-              <th scope="col">ID</th>
-              <th scope="row">{{ movie?.id }}</th>
-            </tr>
-            <tr>
-              <th scope="col">Nombre</th>
-              <td>{{ movie?.nombre }}</td>
-            </tr>
-            <tr>
-              <th scope="col" class="align-middle">Género</th>
-              <td>{{ movie?.genero }}</td>
-            </tr>
-            <tr>
-              <th scope="col">Director</th>
-              <td>{{ movie?.director }}</td>
-            </tr>
-            <tr>
-              <th scope="col">Año</th>
-              <td>{{ movie?.anyo }}</td>
-            </tr>
-            <tr>
-              <th scope="col">Puntuación</th>
-              <td>{{ movie?.puntuacion }} / 100 <i class="bi bi-star-fill"></i></td>
-            </tr>
-            <tr>
-              <th scope="col">Creación</th>
-              <td>{{ movie?.fechaCreacion }} <i class="bi bi-clock-fill"></i></td>
-            </tr>
-            <tr>
-              <th scope="col">Actualización</th>
-              <td>{{ movie?.fechaModificacion }}</td>
-            </tr>
-          </thead>
-        </table>
-      </div>
-      @if(!ocultarBtnVolver){
-        <div class="d-flex justify-content-center">
-          <a href="/sempertegui/plist" class="btn btn-outline-primary">
-            <i class="bi bi-arrow-left me-2"></i> Volver
-          </a>
-        </div>
-      }
+<!-- Vista de detalles -->
+<div class="blog-view-card">
+  <div class="card-header">
+    <h2 class="card-title">Detalles de la Película</h2>
+        @if (movie?.publicado) {
+          <span class="badge bg-success">
+            <i class="bi bi-check-circle-fill me-1"></i>Publicado
+          </span>
+        } @else {
+          <span class="badge bg-secondary">
+            <i class="bi bi-x-circle-fill me-1"></i>No publicado
+          </span>
+        }
+  </div>
+  <div class="card-body">
+    <div class="detail-row">
+      <span class="detail-label">ID</span>
+      <span class="detail-value">{{ movie?.id }}</span>
     </div>
+    <div class="detail-row">
+      <span class="detail-label">Título</span>
+      <span class="detail-value"><strong>{{ movie?.titulo }}</strong></span>
+    </div>
+    <div class="detail-row">
+      <span class="detail-label">Sinopsis</span>
+      <span class="detail-value content-preview">{{ movie?.sinopsis }}</span>
+    </div>
+    <div class="detail-row">
+      <span class="detail-label">
+        {{ (movie?.generos?.split(',')?.length ?? 0) > 1 ? 'Géneros' : 'Género' }}
+      </span>
+      <span class="detail-value">
+        @if (movie?.generos) {
+          @for (tag of movie!.generos.split(','); track tag) {
+            <span class="badge rounded-pill bg-light text-dark border me-1">{{ tag.trim() }}</span>
+          }
+        }
+      </span>
+    </div>
+    <div class="detail-row">
+      <span class="detail-label">Año</span>
+      <span class="detail-value">{{ movie?.anyo }}</span>
+    </div>
+    <div class="detail-row">
+      <span class="detail-label">Puntuación</span>
+      <span class="detail-value">{{ movie?.puntuacion }} / 100 <i class="bi bi-star-fill"></i></span>
+    </div>
+    <div class="detail-row">
+      <span class="detail-label">Director</span>
+      <span class="detail-value">{{ movie?.director }}</span>
+    </div>
+    <!-- <div class="detail-row">
+      <span class="detail-label">Estado</span>
+      <span class="detail-value">
+        @if (movie?.publicado) {
+          <span class="badge bg-success">
+            <i class="bi bi-check-circle-fill me-1"></i>Publicado
+          </span>
+        } @else {
+          <span class="badge bg-secondary">
+            <i class="bi bi-x-circle-fill me-1"></i>No publicado
+          </span>
+        }
+      </span>
+    </div> -->
+    <div class="detail-row">
+      <span class="detail-label">Creado el</span>
+      <span class="detail-value">{{ movie?.fechaCreacion }}</span>
+    </div>
+    @if(movie?.fechaModificacion) {
+      <div class="detail-row">
+        <span class="detail-label">Actualizado el</span>
+        <span class="detail-value">{{ movie?.fechaModificacion }}</span>
+      </div>
+    }
   </div>
 </div>

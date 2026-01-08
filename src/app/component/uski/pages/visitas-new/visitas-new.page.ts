@@ -59,7 +59,7 @@ export class UskiVisitasNewPage implements OnInit {
     this.visitasService.create(payload).subscribe({
       next: () => {
         this.submitting = false;
-        this.snackBar.open('Entrada creada correctamente', 'Cerrar', { duration: 3000 });
+        this.snackBar.open('Reseña creada correctamente', 'Cerrar', { duration: 4000 });
         if (this.visitaForm) {
           this.visitaForm.markAsPristine();
         }
@@ -67,8 +67,8 @@ export class UskiVisitasNewPage implements OnInit {
       },
       error: (err: HttpErrorResponse) => {
         this.submitting = false;
-        this.error = 'Error al crear la entrada';
-        this.snackBar.open('Error al crear la entrada', 'Cerrar', { duration: 4000 });
+        this.error = 'Error al crear la reseña';
+        this.snackBar.open('Error al crear la reseña', 'Cerrar', { duration: 4000 });
         console.error(err);
       },
     });

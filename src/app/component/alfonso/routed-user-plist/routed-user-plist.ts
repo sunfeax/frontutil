@@ -16,15 +16,25 @@ export class RoutedAlfonsoUserPlist {
   oPage: IPage<IAlfonsoRespuesta> | null = null;
   numPage: number = 0;
   numRpp: number = 6;
+  order: string = 'fechaCreacion';
+  direction: string = 'desc';
+  totalPublic: number | null = null;
 
   constructor(private oService: AlfonsoRespuestaService) { }
 
   ngOnInit() {
+    this.loadTotal();
     this.getPage();
   }
 
+  loadTotal() {
+    this.oService.countVisible().subscribe({
+      next: (count) => this.totalPublic = count
+    });
+  }
+
   getPage() {
-    this.oService.getPage(this.numPage, this.numRpp, 'fechaCreacion', 'desc').subscribe({
+    this.oService.getPage(this.numPage, this.numRpp, this.order, this.direction).subscribe({
       next: (data: IPage<IAlfonsoRespuesta>) => {
         this.oPage = data;
         if (this.numPage > 0 && this.numPage >= data.totalPages) {

@@ -6,40 +6,57 @@
       <th scope="row">{{ oQuestion?.id }}</th>
     </tr>
     <tr>
-      <th scope="col">Question</th>
+      <th scope="col">Pregunta</th>
       <td>{{ oQuestion?.question }}</td>
     </tr>
     <tr>
-      <th scope="col" class="align-middle">1st Question</th>
+      <th scope="col" class="align-middle">1a Pregunta</th>
       <td>{{ oQuestion?.answer1 }}</td>
     </tr>
     <tr>
-      <th scope="col" class="align-middle">2nd Question</th>
+      <th scope="col" class="align-middle">2da Pregunta</th>
       <td>{{ oQuestion?.answer2 }}</td>
     </tr>
     <tr>
-      <th scope="col" class="align-middle">3rd Question</th>
+      <th scope="col" class="align-middle">3ra Pregunta</th>
       <td>{{ oQuestion?.answer3 }}</td>
     </tr>
     <tr>
-      <th scope="col" class="align-middle">4th Question</th>
+      <th scope="col" class="align-middle">4ta pregunta</th>
       <td>{{ oQuestion?.answer4 }}</td>
     </tr>
     <tr>
-      <th scope="col" class="align-middle">Correct Question</th>
+      <th scope="col" class="align-middle">Respuesta Correcta</th>
       <td>{{ oQuestion?.correct }}</td>
     </tr>
     <tr>
-      <th scope="col">Creation Date</th>
+      <th scope="col" class="align-middle">Publicado</th>
+      <td>{{ oQuestion?.publicado ? 'Sí' : 'No' }}</td>
+    </tr>
+    <tr>
+      <th scope="col" class="align-middle">Tema</th>
+      <td>@if(oQuestion?.tema == "backend"){
+              <span class="badge bg-warning text-dark">Backend</span>
+            }
+            @else if(oQuestion?.tema =="frontend"){
+              <span class="badge bg-info text-dark">Frontend</span>
+            }
+            @else if(oQuestion?.tema =="vocabulario"){
+              <span class="badge bg-secondary">Vocabulario</span>
+            }</td>
+    </tr>
+    <tr>
+      <th scope="col">Fecha de Creación</th>
       <td>{{ oQuestion?.create_date }}</td>
     </tr>
     <tr>
-      <th scope="col">Update Date</th>
+      <th scope="col">Fecha de Actualización</th>
       <td>{{ oQuestion?.modify_date}}</td>
     </tr>
   </thead>
 </table>
-<div>
-  <a class="button-seccion" href="alcanyiz/questionlist">Tabla Preguntas</a>
+<div class="mt-3">
+  <a class="btn btn-outline-secondary btn-sm" [routerLink]="['/alcanyiz/questionlist']" role="button">Volver a la tabla</a>
+  <a class="btn btn-primary btn-sm ms-2" [routerLink]="['/alcanyiz/questionedit', oQuestion?.id]" role="button">Editar</a>
 </div>
 </div>

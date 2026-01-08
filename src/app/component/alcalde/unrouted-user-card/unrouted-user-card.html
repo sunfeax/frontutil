@@ -14,14 +14,11 @@
             <small class="ms-2">{{ entry.valoracion }}/5</small>
           </span>
         </div>
-        <p class="text-muted mb-1">{{ entry.autor }} &middot; {{ entry.fechaLectura }}</p>
+        <p class="text-muted mb-1">{{ entry.autor }}</p>
         <p class="mb-2">{{ getPreview() }}</p>
         <div class="d-flex align-items-center gap-2 flex-wrap">
-          <span class="badge" [class.bg-success]="entry.publicado" [class.bg-secondary]="!entry.publicado">
-            {{ entry.publicado ? 'Publicado' : 'Borrador' }}
-          </span>
           @if (entry.destacado) {
-            <span class="badge bg-warning text-dark">En seleccion</span>
+            <span class="badge bg-warning text-dark">En selección</span>
           }
           @if (showActions) {
             <a class="btn btn-outline-primary btn-sm" [routerLink]="['/alcalde/post', entry.id]">

@@ -35,8 +35,8 @@ export class UskiAdminPage {
   rellenaCantidad: number = 5;
   rellenando: boolean = false;
   deletingAll: boolean = false;
-  column: string = 'fechaCreacion';
-  direction: 'asc' | 'desc' = 'desc';
+  column: string = 'id';
+  direction: 'asc' | 'desc' = 'asc';
   totalElementsCount: number = 0;
 
   constructor(
@@ -94,12 +94,12 @@ export class UskiAdminPage {
 
   generarFake() {
     this.rellenando = true;
-    this.snackBar.open(`Generando ${this.rellenaCantidad} registros... (actual: ${this.totalElementsCount})`, 'Cerrar', { duration: 3000 });
+    this.snackBar.open(`Generando ${this.rellenaCantidad} registros...`, 'Cerrar', { duration: 4000 });
     this.oVisitasService.rellenaBlog(this.rellenaCantidad).subscribe({
       next: (count: number) => {
         this.rellenando = false;
         this.getPage(); // refrescamos listado
-        this.snackBar.open(`Generados ${count} registros. Total ahora: ${this.totalElementsCount + count}`, 'Cerrar', { duration: 4000 });
+        this.snackBar.open(`Generados ${count} registros.`, 'Cerrar', { duration: 4000 });
       },
       error: (err: HttpErrorResponse) => {
         this.rellenando = false;

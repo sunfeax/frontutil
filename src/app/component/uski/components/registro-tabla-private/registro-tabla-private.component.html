@@ -8,8 +8,8 @@
     <span class="badge bg-secondary">Oculto</span>
   }
 </td>
-<td class="text-nowrap">{{ visita.fechaCreacion | datetime }}</td>
-<td class="text-nowrap">{{ visita.fechaModificacion | datetime }}</td>
-<td class="text-end">
+<td data-label="Creado" class="text-nowrap">{{ visita.fechaCreacion | datetime }}</td>
+<td data-label="Modificado" class="text-nowrap">{{ visita.fechaModificacion | datetime }}</td>
+<td data-label="Acciones" class="text-end">
   <app-registro-tabla-actions [visita]="visita"></app-registro-tabla-actions>
 </td>

@@ -1,0 +1,98 @@
+<div class="container my-5">
+  <div class="mb-4">
+    <a [routerLink]="['/sempertegui']"  class="btn btn-link text-decoration-none text-muted ps-0">
+      <i class="bi bi-arrow-left me-2"></i>Volver al catálogo
+    </a>
+  </div>
+  @if (loading) {
+    <div class="d-flex justify-content-center my-5">
+      <div class="spinner-border text-primary" role="status">
+        <span class="visually-hidden">Cargando...</span>
+      </div>
+    </div>
+  } @if (error) {
+    <div class="alert alert-danger" role="alert">
+      <i class="bi bi-exclamation-triangle me-2"></i>{{ error }}
+    </div>
+  } @if (!loading && !error && movie) {
+
+    <div class="row g-4">
+      <div class="col-12 col-lg-4 mb-4">
+        <div class="card border-0 shadow-sm overflow-hidden">
+          <div class="movie-poster-placeholder d-flex align-items-center justify-content-center bg-light">
+            <i class="bi bi-film display-1 text-secondary opacity-25"></i>
+          </div>
+          <div class="card-body text-center bg-white">
+            <div class="rating-circle mb-2 mx-auto" [style.background]="'conic-gradient(#e63946 ' + movie.puntuacion + '%, #f1f1f1 0)'">
+              <div class="rating-inner">
+                <span class="h3 mb-0">{{ movie.puntuacion }}</span>
+                <small>/100</small>
+              </div>
+            </div>
+            <p class="text-muted small mb-0">Puntuación de la crítica</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="col-12 col-lg-8">
+        <div class="movie-content">
+          <div class="d-flex align-items-center gap-2 mb-2">
+            <span class="badge rounded-pill bg-danger px-3 py-2">{{ movie.anyo }}</span>
+            <span class="badge rounded-pill bg-dark px-3 py-2 fw-medium">
+              <i class="bi bi-tags me-1"></i>{{ movie.generos }}
+            </span>
+            @if(isSessionActive) {
+              @if(movie.publicado) {
+                <span class="badge rounded-pill bg-success px-3 py-2 fw-medium">Publicado</span>
+              } @else {
+                <span class="badge rounded-pill bg-secondary px-3 py-2 fw-medium">No publicado</span>
+              }
+            }
+          </div>
+          
+          <h1 class="display-4 fw-bold text-dark mb-3">{{ movie.titulo }}</h1>
+          
+          <div class="mb-4">
+            <h5 class="text-uppercase fw-bold text-muted small letter-spacing-1">Sinopsis</h5>
+            <p class="lead text-secondary">{{ movie.sinopsis | trim : 150 }}</p>
+          </div>
+
+          <hr class="my-4 opacity-10">
+
+          <div class="row g-4">
+            <div class="col-sm-6 col-md-4">
+              <div class="info-group">
+                <i class="bi bi-person-badge text-danger mb-2"></i>
+                <span class="d-block text-muted small text-uppercase">Director</span>
+                <span class="fw-bold">{{ movie.director }}</span>
+              </div>
+            </div>
+            <div class="col-sm-6 col-md-4">
+              <div class="info-group">
+                <i class="bi bi-calendar-event text-danger mb-2"></i>
+                <span class="d-block text-muted small text-uppercase">Publicado el</span>
+                <span class="fw-bold">{{ movie.fechaCreacion | datetime : 'solofechacompleta' }}</span>
+              </div>
+            </div>
+            <div class="col-sm-6 col-md-4">
+              <div class="info-group">
+                <i class="bi bi-pencil-square text-danger mb-2"></i>
+                <span class="d-block text-muted small text-uppercase">Última actualización</span>
+                <span class="fw-bold">{{ movie.fechaModificacion ? (movie.fechaModificacion | datetime : 'solofechacompleta') : 'Sin cambios' }}</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="mt-5 d-flex gap-3">
+            <button class="btn btn-danger btn-lg px-4 shadow-sm">
+              <i class="bi bi-play-fill me-2"></i>Ver Tráiler
+            </button>
+            <button class="btn btn-outline-dark btn-lg px-4">
+              <i class="bi bi-share me-2"></i>Compartir
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  }
+</div>

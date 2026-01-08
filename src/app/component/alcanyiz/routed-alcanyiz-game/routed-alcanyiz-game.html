@@ -1,46 +1,43 @@
-<div class="container-game">
-  <h2>Learning Route</h2>
-  <div class="game-head">Puntuación: <strong>{{ score }}</strong></div>
+<div class="container my-4 container-game">
+  <h2 class="h4 text-center mb-2">Learning Route</h2>
+  <div class="text-center text-muted mb-3">Puntuación: <strong>{{ score }}</strong></div>
   <div class="learning-route">
-    <button class="button-class class-n1" (click)="openDialog(0)" [disabled]="completed[0]">1</button>
-    <button class="button-class class-n2" (click)="openDialog(1)" [disabled]="completed[1]">2</button>
-    <button class="button-class class-n3" (click)="openDialog(2)" [disabled]="completed[2]">3</button>
-    <button class="button-class class-n4" (click)="openDialog(3)" [disabled]="completed[3]">4</button>
-    <button class="button-class class-n5" (click)="openDialog(4)" [disabled]="completed[4]">5</button>
-    <button class="button-class class-n6" (click)="openDialog(5)" [disabled]="completed[5]">6</button>
-    <button class="button-class class-n7" (click)="openDialog(6)" [disabled]="completed[6]">7</button>
-    <button class="button-class class-n8" (click)="openDialog(7)" [disabled]="completed[7]">8</button>
-    <button class="button-class class-n9" (click)="openDialog(8)" [disabled]="completed[8]">9</button>
+    <div class="d-flex justify-content-center class-n1"><button class="button-class btn btn-outline-info btn-sm d-inline-flex align-items-center justify-content-center" (click)="openDialog(0)" [disabled]="completed[0]">1</button></div>
+    <div class="d-flex justify-content-center class-n2"><button class="button-class btn btn-outline-info btn-sm d-inline-flex align-items-center justify-content-center" (click)="openDialog(1)" [disabled]="completed[1]">2</button></div>
+    <div class="d-flex justify-content-center class-n3"><button class="button-class btn btn-outline-info btn-sm d-inline-flex align-items-center justify-content-center" (click)="openDialog(2)" [disabled]="completed[2]">3</button></div>
+    <div class="d-flex justify-content-center class-n4"><button class="button-class btn btn-outline-info btn-sm d-inline-flex align-items-center justify-content-center" (click)="openDialog(3)" [disabled]="completed[3]">4</button></div>
+    <div class="d-flex justify-content-center class-n5"><button class="button-class btn btn-outline-info btn-sm d-inline-flex align-items-center justify-content-center" (click)="openDialog(4)" [disabled]="completed[4]">5</button></div>
+    <div class="d-flex justify-content-center class-n6"><button class="button-class btn btn-outline-info btn-sm d-inline-flex align-items-center justify-content-center" (click)="openDialog(5)" [disabled]="completed[5]">6</button></div>
+    <div class="d-flex justify-content-center class-n7"><button class="button-class btn btn-outline-info btn-sm d-inline-flex align-items-center justify-content-center" (click)="openDialog(6)" [disabled]="completed[6]">7</button></div>
+    <div class="d-flex justify-content-center class-n8"><button class="button-class btn btn-outline-info btn-sm d-inline-flex align-items-center justify-content-center" (click)="openDialog(7)" [disabled]="completed[7]">8</button></div>
+    <div class="d-flex justify-content-center class-n9"><button class="button-class btn btn-outline-warning btn-sm d-inline-flex align-items-center justify-content-center" (click)="openDialog(8)" [disabled]="completed[8]">9</button></div>
   </div>
 
-  <!-- Inline modal dialog -->
-  <div class="game-dialog-backdrop" *ngIf="dialogOpen">
-    <div class="game-dialog">
-      <div class="dialog-header">
-        <h3>Pregunta {{ currentQ + 1 }} / {{ dialogQuestions.length }}</h3>
-        <div class="dialog-score">Puntuación: {{ score }}</div>
+  <div class="game-dialog-backdrop position-fixed top-0 start-0 w-100 h-100 d-flex justify-content-center align-items-center z-2 bg-body bg-opacity-50" *ngIf="dialogOpen">
+    <div class="game-dialog border rounded p-3 shadow bg-body z-3" style="max-width: 680px; width: 92%;">
+      <div class="d-flex justify-content-between align-items-center mb-2">
+        <h3 class="h6 mb-0">Pregunta {{ currentQ + 1 }} / {{ dialogQuestions.length }}</h3>
+        <div class="text-muted">Puntuación: {{ score }}</div>
       </div>
-      <div class="dialog-body" *ngIf="dialogQuestions.length">
-        <p class="q-text">{{ dialogQuestions[currentQ]?.text }}</p>
-        <div class="choices">
-          <button class="choice" *ngFor="let c of dialogQuestions[currentQ]?.choices; let i = index" (click)="selectChoice(i)" [class.selected]="selectedChoice === i">{{ c }}</button>
+      <div *ngIf="dialogQuestions.length">
+        <p class="mb-2">{{ dialogQuestions[currentQ]?.text }}</p>
+        <div class="d-grid gap-2">
+          <button class="btn btn-outline-secondary btn-sm text-start" *ngFor="let c of dialogQuestions[currentQ]?.choices; let i = index" (click)="selectChoice(i)" [class.active]="selectedChoice === i">{{ c }}</button>
         </div>
       </div>
-      <div class="dialog-actions">
-        <button class="btn btn-primary" (click)="submitAnswer()">Siguiente</button>
+      <div class="d-flex justify-content-end mt-3">
+        <button class="btn btn-primary btn-sm" (click)="submitAnswer()">Siguiente</button>
       </div>
     </div>
   </div>
 
-  <!-- Final results overlay -->
-  <div class="results-backdrop" *ngIf="allCompleted" >
-    <div class="results-menu">
-      <h3>Resultados</h3>
-      <p class="big-score">Puntuación final: <strong>{{ score }}</strong></p>
-      <div class="results-actions">
-    <button class="btn btn-primary" (click)="goToMenu()">Volver al menú</button>
+  <div class="results-backdrop position-fixed top-0 start-0 w-100 h-100 d-flex justify-content-center align-items-center bg-body bg-opacity-50" *ngIf="allCompleted" >
+    <div class="results-menu border rounded p-4 shadow bg-body text-center" style="max-width: 520px; width: 92%;">
+      <h3 class="h5">Resultados</h3>
+      <p class="big-score mb-2">Puntuación final: <strong>{{ score }}</strong></p>
+      <div class="results-actions d-flex justify-content-center gap-2">
+        <button class="btn btn-primary btn-sm" (click)="goToMenu()">Volver al menú</button>
       </div>
     </div>
   </div>
-
 </div>

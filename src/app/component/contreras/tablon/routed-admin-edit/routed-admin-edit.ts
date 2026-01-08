@@ -18,6 +18,17 @@ export class RoutedAdminEdit implements OnInit {
     private tablonService = inject(TablonService);
 
     tablonForm!: FormGroup;
+        // En caso de no guardar al editar
+    canDeactivate(): boolean {
+        if (!this.tablonForm?.dirty || this.submitting) {
+            return true;
+        }
+        return this.avisarUser();
+    }
+        // Avisar al usuario antes de salir sin guardar
+    avisarUser(): boolean {
+        return confirm('No has guardado tus cambios, quieres salir igualmente?');
+    }
     tablonId: number | null = null;
     loading: boolean = true;
     error: string | null = null;
@@ -88,6 +99,7 @@ export class RoutedAdminEdit implements OnInit {
         this.tablonService.update(payload).subscribe({
             next: () => {
                 this.submitting = false;
+                this.tablonForm.markAsPristine(); // Marcar como no modificado
                 this.router.navigate(['/tablon/plist']);
             },
             error: (err: HttpErrorResponse) => {

@@ -4,10 +4,14 @@ import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angula
 import { PalomaresService } from '../../../service/palomares';
 import { IPalomares } from '../../../model/palomares';
 import { HttpErrorResponse } from '@angular/common/http';
+import { MatDialog, MatDialogModule } from '@angular/material/dialog';
+import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
+import { ConfirmDialogComponent } from '../../shared/confirm-dialog/confirm-dialog.component';
+import { debug } from '../../../environment/environment';
 
 @Component({
   selector: 'app-routed-admin-new',
-  imports: [ReactiveFormsModule, RouterLink],
+  imports: [ReactiveFormsModule, RouterLink, MatDialogModule, MatSnackBarModule],
   templateUrl: './routed-admin-new.html',
   styleUrl: './routed-admin-new.css',
 })
@@ -15,10 +19,13 @@ export class RoutedAdminNew implements OnInit {
   private fb = inject(FormBuilder);
   private router = inject(Router);
   private palomaresService = inject(PalomaresService);
+  private dialog = inject(MatDialog);
+  private snackBar = inject(MatSnackBar);
 
   palomaresForm!: FormGroup;
   error: string | null = null;
   submitting: boolean = false;
+  debugging: boolean = debug;
 
   ngOnInit(): void {
     this.initForm();
@@ -29,7 +36,7 @@ export class RoutedAdminNew implements OnInit {
       titulo: ['', [
         Validators.required,
         Validators.minLength(3),
-        Validators.maxLength(200)
+        Validators.maxLength(1024)
       ]],
       descripcion: ['', [
         Validators.required,
@@ -38,7 +45,7 @@ export class RoutedAdminNew implements OnInit {
       categoria: ['', [
         Validators.required,
         Validators.minLength(3),
-        Validators.maxLength(100)
+        Validators.maxLength(1024)
       ]],
       completada: [false],
       publicado: [false]
@@ -46,13 +53,8 @@ export class RoutedAdminNew implements OnInit {
   }
 
   onSubmit(): void {
-    console.log('Formulario submitted');
-    console.log('Formulario válido:', this.palomaresForm.valid);
-    console.log('Valores del formulario:', this.palomaresForm.value);
-    
     if (!this.palomaresForm.valid) {
       this.palomaresForm.markAllAsTouched();
-      console.log('Formulario no válido, mostrando errores');
       return;
     }
 
@@ -65,22 +67,38 @@ export class RoutedAdminNew implements OnInit {
       publicado: this.palomaresForm.value.publicado,
     };
 
-    console.log('Enviando payload:', payload);
-
     this.palomaresService.create(payload).subscribe({
-      next: (createdPalomares) => {
-        console.log('Tarea creada:', createdPalomares);
+      next: () => {
         this.submitting = false;
+        // mark form as pristine so canDeactivate guard won't ask confirmation
+        if (this.palomaresForm) {
+          this.palomaresForm.markAsPristine();
+        }
+        // inform the user
+        this.snackBar.open('Tarea creada correctamente', 'Cerrar', { duration: 3000 });
         this.router.navigate(['/palomares/plist']);
       },
       error: (err: HttpErrorResponse) => {
         this.submitting = false;
         this.error = 'Error al crear la tarea';
-        console.error('Error al crear tarea:', err);
-        console.error('Status:', err.status);
-        console.error('Message:', err.message);
+        this.snackBar.open('Error al crear la tarea', 'Cerrar', { duration: 4000 });
+        this.debugging && console.error(err);
       },
     });
+  }
+
+  // Guard: ask confirmation if the form has unsaved changes
+  canDeactivate(): boolean | Promise<boolean> | import("rxjs").Observable<boolean> {
+    if (!this.palomaresForm || !this.palomaresForm.dirty) {
+      return true;
+    }
+    const ref = this.dialog.open(ConfirmDialogComponent, {
+      data: {
+        title: 'Cambios sin guardar',
+        message: 'Hay cambios sin guardar. ¿Desea salir sin guardar los cambios?'
+      }
+    });
+    return ref.afterClosed();
   }
 
   get titulo() {

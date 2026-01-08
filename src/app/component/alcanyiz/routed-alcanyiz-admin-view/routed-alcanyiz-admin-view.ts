@@ -16,11 +16,10 @@ export class RoutedAlcanyizAdminView {
 oQuestion: questionModel | null = null;
 
   constructor(private oQuestionService: jsQuestionService, private route: ActivatedRoute) {
-    // Obtener el ID del blog desde la ruta
     const idParam = this.route.snapshot.paramMap.get('id');
     const questionId = idParam ? Number(idParam) : NaN;
     if (isNaN(questionId)) {
-      console.error('Invalid blog id:', idParam);
+      console.error('Invalid question id:', idParam);
       return;
     }
     this.getQuestion(questionId);
@@ -30,7 +29,6 @@ oQuestion: questionModel | null = null;
   getQuestion(questionId: number) {
     this.oQuestionService.get(questionId).subscribe({
       next: (data: questionModel) => {
-        console.log('Pregunta recibida:', data);
         this.oQuestion = data;
       },
       error: (error: HttpErrorResponse) => {

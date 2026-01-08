@@ -1,152 +1,365 @@
-// Componente que muestra la vista de administración con controles para filtrar, crear, generar datos y una tabla con preguntas y acciones
-// Obtiene la página de preguntas para el administrador, validando que la página no sea negativa
-// Cambia la cantidad de elementos por página
-// Cambia el orden de las preguntas en la tabla
-// Filtra las preguntas según el texto ingresado
-// Genera datos de prueba y vacía la lista
-// Permite al administrador publicar o despublicar una pregunta
-// Permite al administrador aprobar o desaprobar una pregunta
-import { Component, OnInit } from '@angular/core';
-import { RouterLink } from '@angular/router';
+import { Component } from '@angular/core';
+import { RouterLink, Router } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { HttpErrorResponse } from '@angular/common/http';
 import { IPage } from '../../../model/plist';
-import { ISoares } from '../../../model/soares';
+import { ISoares } from '../../../model/soares/soares';
 import { SoaresService } from '../../../service/soares';
 import { Paginacion } from "../../shared/paginacion/paginacion";
 import { BotoneraRpp } from "../../shared/botonera-rpp/botonera-rpp";
-import { FormsModule } from '@angular/forms';
 
 @Component({
-  selector: 'app-routed-admin-plist',
+  selector: 'app-soares-routed-admin-plist',
+  imports: [RouterLink, CommonModule, Paginacion, BotoneraRpp],
   templateUrl: './routed-admin-plist.html',
   styleUrl: './routed-admin-plist.css',
-  standalone: true,
-  imports: [RouterLink, Paginacion, BotoneraRpp, FormsModule, CommonModule],
 })
-export class SoaresRoutedAdminPlist implements OnInit {
-    soloPendientes: boolean = false;
+export class SoaresRoutedAdminPlist {
   oPage: IPage<ISoares> | null = null;
   numPage: number = 0;
   numRpp: number = 5;
-  numTotalPages: number = 0;
-  numTotalElements: number = 0;
+  rellenaCantidad: number = 10;
+  rellenando: boolean = false;
+  rellenaOk: number | null = null;
+  rellenaError: string | null = null;
+  searchTerm: string = '';
+  private searchTimer: any = null;
   orderField: string = 'id';
   orderDirection: string = 'asc';
-  filter: string = '';
-  numPopulate: number = 10;
+  successMessage: string | null = null;
+  errorMessage: string | null = null;
+  filtroPublicacion: 'todas' | 'publicadas' | 'solicitudes' = 'todas';
+  toastMessage: string | null = null;
+  toastType: 'success' | 'error' = 'success';
+  itemToDeleteId: number | null = null;
+  itemToView: ISoares | null = null;
+  modalToastMessage: string | null = null;
+  modalToastType: 'success' | 'error' = 'success';
+  confirmandoEliminacion: boolean = false;
+  procesandoAccion: boolean = false;
 
-  constructor(private soaresService: SoaresService) {}
+  constructor(private oSoaresService: SoaresService, private router: Router) { }
 
-  ngOnInit(): void {
+  oBotonera: string[] = [];
+
+  ngOnInit() {
     this.getPage();
   }
 
-  getPage(): void {
-    // Validar que la página nunca sea negativa
-    const safePage = this.numPage < 0 ? 0 : this.numPage;
-    this.soaresService.getPageAdmin(
-      safePage,
-      this.numRpp,
-      this.orderField,
-      this.orderDirection,
-      this.filter,
-      this.soloPendientes
-    ).subscribe({
-      next: (resp: IPage<ISoares>) => {
-        this.oPage = resp;
-        this.numTotalPages = resp.totalPages;
-        this.numTotalElements = resp.totalElements;
-        this.numPage = resp.number;
+  ngAfterViewInit() {
+    const modalElement = document.getElementById('modalVer');
+    if (modalElement) {
+      modalElement.addEventListener('hidden.bs.modal', () => {
+        this.cerrarModalVer();
+      });
+    }
+  }
+
+  getPage() {
+    let soloPendientes = false;
+    let soloPublicadas = false;
+    const filter = this.searchTerm.trim();
+    
+    if (this.filtroPublicacion === 'solicitudes') {
+      soloPendientes = true;
+    } else if (this.filtroPublicacion === 'publicadas') {
+      soloPublicadas = true;
+    }
+
+    this.oSoaresService.getPageAdmin(this.numPage, this.numRpp, this.orderField, this.orderDirection, filter, soloPendientes, soloPublicadas).subscribe({
+      next: (data: IPage<ISoares>) => {
+        this.oPage = data;
+        this.rellenaOk = null;
+        this.rellenaError = null;
+        if (this.numPage > 0 && this.numPage >= data.totalPages) {
+          this.numPage = data.totalPages - 1;
+          this.getPage();
+        }
+      },
+      error: (error: HttpErrorResponse) => {
+        console.error(error);
+        this.mostrarToast('Error al cargar las preguntas', 'error');
+      },
+    });
+  }
+
+  goToPage(numPage: number) {
+    this.numPage = numPage;
+    this.getPage();
+    return false;
+  }
+
+  onRppChange(n: number) {
+    this.numRpp = n;
+    this.getPage();
+    return false;
+  }
+
+  onCantidadChange(value: string) {
+    this.rellenaCantidad = +value;
+    return false;
+  }
+
+  generarFake() {
+    this.rellenaOk = null;
+    this.rellenaError = null;
+    this.rellenando = true;
+    this.oSoaresService.populate(this.rellenaCantidad).subscribe({
+      next: (count: number) => {
+        this.rellenando = false;
+        this.rellenaOk = count;
+        this.mostrarToast(`${count} frases generadas correctamente`, 'success');
+        this.getPage();
       },
       error: (err: HttpErrorResponse) => {
-        console.log(err);
-      }
-    })
+        this.rellenando = false;
+        this.rellenaError = 'Error generando datos fake';
+        this.mostrarToast('Error generando frases', 'error');
+        console.error(err);
+      },
+    });
   }
 
-  onPageChange(n: number) {
-    // Validar que la página nunca sea negativa
-    this.numPage = n < 0 ? 0 : n;
+  vaciarPreguntas() {
+    if (!confirm('¿Estás seguro de que deseas vaciar todas las preguntas?')) {
+      return;
+    }
+    this.oSoaresService.empty().subscribe({
+      next: () => {
+        this.getPage();
+      },
+      error: (err: HttpErrorResponse) => {
+        console.error('Error vaciando preguntas:', err);
+      },
+    });
+  }
+
+  togglePublicacion(oSoares: ISoares) {
+    oSoares.publicacion = !oSoares.publicacion;
+    this.oSoaresService.updateOne(oSoares).subscribe({
+      next: () => {
+        this.mostrarToast(oSoares.publicacion ? 'Pregunta publicada correctamente' : 'Pregunta despublicada correctamente', 'success');
+        this.getPage();
+      },
+      error: (error: HttpErrorResponse) => {
+        console.error(error);
+        oSoares.publicacion = !oSoares.publicacion;
+        this.mostrarToast('Error al actualizar la publicación', 'error');
+      },
+    });
+  }
+
+  /**
+   * Búsqueda con debounce de 350ms para evitar múltiples peticiones al servidor
+   */
+  onSearch(term: string) {
+    const trimmedTerm = term ? term.trim() : '';
+    
+    // Cancelar timer anterior si existe
+    if (this.searchTimer) {
+      clearTimeout(this.searchTimer);
+    }
+    
+    // Si el término es el mismo, no hacer nada
+    if (this.searchTerm === trimmedTerm) {
+      return false;
+    }
+    
+    this.searchTerm = trimmedTerm;
+    this.numPage = 0;
+    
+    // Aplicar debounce de 350ms
+    this.searchTimer = setTimeout(() => {
+      this.getPage();
+    }, 350);
+    
+    return false;
+  }
+
+  /**
+   * Ejecutar búsqueda inmediatamente (usado al presionar Enter)
+   */
+  onSearchImmediate(term: string) {
+    this.searchTerm = term ? term.trim() : '';
+    this.numPage = 0;
+    
+    // Cancelar timer de debounce si existe
+    if (this.searchTimer) {
+      clearTimeout(this.searchTimer);
+      this.searchTimer = null;
+    }
+    
+    this.getPage();
+    return false;
+  }
+
+  ordenar(field: string) {
+    if (this.orderField === field) {
+      this.orderDirection = this.orderDirection === 'asc' ? 'desc' : 'asc';
+    } else {
+      this.orderField = field;
+      this.orderDirection = 'asc';
+    }
+    this.numPage = 0;
     this.getPage();
   }
 
-  onRppChange(rpp: number) {
-    this.numRpp = rpp;
+  setSortColumn(column: string) {
+    this.orderField = column;
+    this.orderDirection = this.orderDirection === 'asc' ? 'desc' : 'asc';
     this.numPage = 0;
     this.getPage();
     return false;
   }
 
-  onOrder(order: string) {
-    this.orderField = order;
-    this.orderDirection = this.orderDirection === 'asc' ? 'desc' : 'asc';
-    this.getPage();
-  }
-
-  onFilterChange(filter: string) {
-    this.filter = filter;
+  filtrarPor(filtro: 'todas' | 'publicadas' | 'solicitudes') {
+    this.filtroPublicacion = filtro;
     this.numPage = 0;
     this.getPage();
   }
 
-  onPopulate(amount: any) {
-    amount = parseInt(amount);
-    this.soaresService.populate(amount).subscribe({
-      next: (resp: number) => {
-        this.numTotalElements = resp;
-        this.getPage();
-      },
-      error: (err: HttpErrorResponse) => {
-        console.log(err);
-      }
-    })
-  }
+  confirmarVaciar() {
+    if (!this.oPage || !this.oPage.content || this.oPage.content.length === 0) {
+      this.mostrarToast('No hay preguntas para vaciar', 'error');
+      return;
+    }
 
-  onEmpty() {
-    this.soaresService.empty().subscribe({
-      next: (resp: number) => {
-        this.numTotalElements = resp;
-        this.getPage();
-      },
-      error: (err: HttpErrorResponse) => {
-        console.log(err);
-      }
-    })
-  }
-
-  // Lógica para el botón de Publicación (toggle)
-  togglePublicacion(soares: ISoares): void {
-    const updatedSoares: ISoares = {
-      ...soares,
-      publicacion: !soares.publicacion,
-    };
-    this.soaresService.updateOne(updatedSoares).subscribe({
+    this.oSoaresService.empty().subscribe({
       next: () => {
-        soares.publicacion = !soares.publicacion; // Actualiza el estado localmente
+        this.rellenaOk = null;
+        this.rellenaError = null;
+        this.mostrarToast('Todas las preguntas han sido eliminadas', 'success');
+        this.getPage();
       },
       error: (err: HttpErrorResponse) => {
-        console.error('Error al cambiar el estado de publicación:', err);
+        console.error('Error vaciando preguntas:', err);
+        this.mostrarToast('Error al vaciar las preguntas', 'error');
       },
     });
   }
 
-  // Lógica para el botón de Aprobación (toggle)
-  toggleAprobacion(soares: ISoares): void {
-    // Lógica de aprobación: si está pendiente, se aprueba. Si está aprobado, se desaprueba (vuelve a pendiente).
-    // Asumo que 'aprobacion' es un campo booleano o similar. Si es un estado más complejo (e.g., 'PENDIENTE', 'APROBADO', 'RECHAZADO'),
-    // se necesitaría más información. Por ahora, lo implemento como un simple toggle booleano.
-    const updatedSoares: ISoares = {
-      ...soares,
-      aprobacion: !soares.aprobacion, // Asumiendo que existe un campo 'aprobacion' en ISoares
-    };
-    this.soaresService.updateOne(updatedSoares).subscribe({
+  setItemToDelete(id: number) {
+    this.itemToDeleteId = id;
+  }
+
+  setItemToView(soares: ISoares) {
+    this.itemToView = soares;
+    this.modalToastMessage = null;
+    this.confirmandoEliminacion = false;
+    this.procesandoAccion = false;
+  }
+
+  cerrarModalVer() {
+    // Quitar foco del elemento activo y moverlo al body para evitar error de aria-hidden
+    const activeElement = document.activeElement as HTMLElement;
+    if (activeElement && activeElement.blur) {
+      activeElement.blur();
+    }
+    if (document.body && document.body.focus) {
+      document.body.focus();
+    }
+    setTimeout(() => {
+      this.itemToView = null;
+      this.modalToastMessage = null;
+      this.confirmandoEliminacion = false;
+      this.procesandoAccion = false;
+    }, 0);
+  }
+
+  togglePublicacionFromModal() {
+    if (!this.itemToView || this.procesandoAccion) return;
+    
+    this.procesandoAccion = true;
+    this.modalToastMessage = null;
+    const publicacionAnterior = this.itemToView.publicacion;
+    this.itemToView.publicacion = !this.itemToView.publicacion;
+    
+    this.oSoaresService.updateOne(this.itemToView).subscribe({
       next: () => {
-        soares.aprobacion = !soares.aprobacion; // Actualiza el estado localmente
+        this.procesandoAccion = false;
+        this.mostrarToastModal(
+          this.itemToView!.publicacion ? 'Pregunta publicada correctamente' : 'Pregunta despublicada correctamente', 
+          'success'
+        );
+        this.getPage();
       },
-      error: (err: HttpErrorResponse) => {
-        console.error('Error al cambiar el estado de aprobación:', err);
+      error: (error: HttpErrorResponse) => {
+        console.error(error);
+        this.procesandoAccion = false;
+        this.itemToView!.publicacion = publicacionAnterior;
+        this.mostrarToastModal('Error al actualizar la publicación', 'error');
       },
     });
+  }
+
+  solicitarConfirmacionEliminar() {
+    this.confirmandoEliminacion = true;
+    this.modalToastMessage = null;
+  }
+
+  cancelarEliminacion() {
+    this.confirmandoEliminacion = false;
+  }
+
+  confirmarEliminarDesdeModal() {
+    if (!this.itemToView || this.procesandoAccion) return;
+    
+    this.procesandoAccion = true;
+    this.modalToastMessage = null;
+    
+    this.oSoaresService.removeOne(this.itemToView.id).subscribe({
+      next: () => {
+        this.procesandoAccion = false;
+        this.mostrarToast('Pregunta eliminada correctamente', 'success');
+        this.getPage();
+        // Cerrar el modal
+        const modalElement = document.getElementById('modalVer');
+        if (modalElement) {
+          const modal = document.querySelector('#modalVer');
+          modal?.querySelector('[data-bs-dismiss="modal"]')?.dispatchEvent(new Event('click'));
+        }
+        this.itemToView = null;
+        this.confirmandoEliminacion = false;
+      },
+      error: (err: HttpErrorResponse) => {
+        console.error('Error eliminando pregunta:', err);
+        this.procesandoAccion = false;
+        this.confirmandoEliminacion = false;
+        this.mostrarToastModal('Error al eliminar la pregunta', 'error');
+      },
+    });
+  }
+
+  confirmarEliminar() {
+    if (!this.itemToDeleteId) return;
+    // Mover el foco al body antes de cerrar el modal para accesibilidad
+    if (document.body && document.body.focus) {
+      document.body.focus();
+    }
+    this.oSoaresService.removeOne(this.itemToDeleteId).subscribe({
+      next: () => {
+        this.mostrarToast('Pregunta eliminada correctamente', 'success');
+        this.itemToDeleteId = null;
+        this.itemToView = null;
+        this.getPage();
+      },
+      error: (err: HttpErrorResponse) => {
+        console.error('Error eliminando pregunta:', err);
+        this.mostrarToast('Error al eliminar la pregunta', 'error');
+        this.itemToDeleteId = null;
+      },
+    });
+  }
+
+  mostrarToastModal(mensaje: string, tipo: 'success' | 'error') {
+    this.modalToastMessage = mensaje;
+    this.modalToastType = tipo;
+    setTimeout(() => this.modalToastMessage = null, 3000);
+  }
+
+  mostrarToast(mensaje: string, tipo: 'success' | 'error') {
+    this.toastMessage = mensaje;
+    this.toastType = tipo;
+    setTimeout(() => this.toastMessage = null, 2000);
   }
 }

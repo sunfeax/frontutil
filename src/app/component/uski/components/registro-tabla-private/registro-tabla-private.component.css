@@ -1,0 +1,41 @@
+@media (max-width: 768px) {
+  :host-context(.mobile-stack) {
+    display: block;
+    border: 1px solid #dee2e6;
+    border-radius: 0.75rem;
+    overflow: hidden;
+    margin-bottom: 0.75rem;
+  }
+
+  :host-context(.mobile-stack) td,
+  :host-context(.mobile-stack) th {
+    display: grid;
+    grid-template-columns: 124px 1fr;
+    align-items: start;
+    width: 100%;
+    padding: 0.65rem 0.85rem;
+    border: 0;
+    text-align: left;
+    word-break: break-word;
+  }
+
+  :host-context(.mobile-stack) td::before,
+  :host-context(.mobile-stack) th::before {
+    content: attr(data-label);
+    font-weight: 600;
+    color: #6c757d;
+    padding-right: 0.5rem;
+  }
+
+  :host-context(.mobile-stack) td:last-child,
+  :host-context(.mobile-stack) th:last-child {
+    padding-bottom: 0.85rem;
+  }
+
+  :host-context(.mobile-stack) .text-nowrap,
+  :host-context(.mobile-stack) .text-truncate {
+    white-space: normal !important;
+    overflow: visible;
+    text-overflow: unset;
+  }
+}

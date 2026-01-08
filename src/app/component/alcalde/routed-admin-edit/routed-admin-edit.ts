@@ -2,9 +2,13 @@ import { Component, OnInit, inject } from '@angular/core';
 import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { HttpErrorResponse } from '@angular/common/http';
+import { MatDialog } from '@angular/material/dialog';
+import { Observable } from 'rxjs';
 
 import { AlcaldeService } from '../../../service/alcalde';
 import { IAlcalde } from '../../../model/alcalde';
+import { CanComponentDeactivate } from '../../../guards/pending-changes.guard';
+import { ConfirmDialogComponent } from '../../shared/confirm-dialog/confirm-dialog.component';
 
 @Component({
   selector: 'app-alcalde-admin-edit',
@@ -12,17 +16,19 @@ import { IAlcalde } from '../../../model/alcalde';
   templateUrl: './routed-admin-edit.html',
   styleUrl: './routed-admin-edit.css',
 })
-export class AlcaldeRoutedAdminEdit implements OnInit {
+export class AlcaldeRoutedAdminEdit implements OnInit, CanComponentDeactivate {
   private fb = inject(FormBuilder);
   private route = inject(ActivatedRoute);
   private router = inject(Router);
   private service = inject(AlcaldeService);
+  private dialog = inject(MatDialog);
 
   form!: FormGroup;
   loading = true;
   submitting = false;
   error: string | null = null;
   entryId: number | null = null;
+  private formSubmitted = false;
 
   ngOnInit(): void {
     this.form = this.fb.group({
@@ -31,7 +37,6 @@ export class AlcaldeRoutedAdminEdit implements OnInit {
       genero: ['', [Validators.required, Validators.minLength(3), Validators.maxLength(100)]],
       reseña: ['', [Validators.required, Validators.minLength(20)]],
       valoracion: [3, [Validators.required, Validators.min(1), Validators.max(5)]],
-      fechaLectura: ['', [Validators.required]],
       publicado: [true],
       destacado: [false],
     });
@@ -42,8 +47,21 @@ export class AlcaldeRoutedAdminEdit implements OnInit {
       this.load(id);
     } else {
       this.loading = false;
-      this.error = 'Identificador no valido';
+      this.error = 'Identificador no válido';
     }
+  }
+
+  canDeactivate(): Observable<boolean> | boolean {
+    if (this.formSubmitted || !this.form.dirty) {
+      return true;
+    }
+    const ref = this.dialog.open(ConfirmDialogComponent, {
+      data: {
+        title: 'Cambios sin guardar',
+        message: 'Hay cambios sin guardar. ¿Desea salir sin guardar los cambios?'
+      }
+    });
+    return ref.afterClosed();
   }
 
   load(id: number) {
@@ -55,10 +73,10 @@ export class AlcaldeRoutedAdminEdit implements OnInit {
           genero: data.genero,
           reseña: data.reseña,
           valoracion: data.valoracion,
-          fechaLectura: data.fechaLectura,
           publicado: data.publicado,
           destacado: data.destacado,
         });
+        this.form.markAsPristine();
         this.loading = false;
       },
       error: (err: HttpErrorResponse) => {
@@ -83,7 +101,6 @@ export class AlcaldeRoutedAdminEdit implements OnInit {
       genero: this.form.value.genero,
       reseña: this.form.value.reseña,
       valoracion: Number(this.form.value.valoracion),
-      fechaLectura: this.form.value.fechaLectura,
       publicado: this.form.value.publicado,
       destacado: this.form.value.destacado,
     };
@@ -91,6 +108,7 @@ export class AlcaldeRoutedAdminEdit implements OnInit {
     this.service.update(payload).subscribe({
       next: () => {
         this.submitting = false;
+        this.formSubmitted = true;
         this.router.navigate(['/alcalde/plist']);
       },
       error: (err: HttpErrorResponse) => {
@@ -101,9 +119,8 @@ export class AlcaldeRoutedAdminEdit implements OnInit {
     });
   }
 
-  get titulo() { return this.form.get('título'); }
+  get titulo() { return this.form.get('titulo'); }
   get autor() { return this.form.get('autor'); }
   get genero() { return this.form.get('genero'); }
-  get valoracion() { return this.form.get('valoración'); }
-  get fechaLectura() { return this.form.get('fechaLectura'); }
+  get valoracion() { return this.form.get('valoracion'); }
 }

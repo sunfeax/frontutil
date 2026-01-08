@@ -1,6 +1,16 @@
-.no-movies-msg {
-  text-align: center;
-  color: #777;
-  font-style: italic;
-  margin-top: 50px;
+.sortable {
+  cursor: pointer;
+}
+
+/* Permite el salto de línea por ancho en las celdas que queremos */
+.table td {
+    white-space: normal; /* Esto permite que el texto baje si no cabe */
+    word-wrap: break-word;
+    vertical-align: middle;
+}
+
+th {
+  background-color: #333;
+  color: #fff;
+  font-weight: 500;
 }

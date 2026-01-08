@@ -7,11 +7,14 @@ import { PalomaresService } from '../../../service/palomares';
 import { Paginacion } from "../../shared/paginacion/paginacion";
 import { BotoneraRpp } from "../../shared/botonera-rpp/botonera-rpp";
 import { DatetimePipe } from "../../../pipe/datetime-pipe";
+import { MatDialog, MatDialogModule } from '@angular/material/dialog';
+import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
+import { ConfirmDialogComponent } from '../../shared/confirm-dialog/confirm-dialog.component';
 import { debug } from '../../../environment/environment';
 
 @Component({
   selector: 'app-routed-admin-plist',
-  imports: [RouterLink, Paginacion, BotoneraRpp, DatetimePipe],
+  imports: [RouterLink, Paginacion, BotoneraRpp, DatetimePipe, MatDialogModule, MatSnackBarModule],
   templateUrl: './routed-admin-plist.html',
   styleUrl: './routed-admin-plist.css',
 })
@@ -22,36 +25,35 @@ export class RoutedAdminPlist {
   rellenaCantidad: number = 10;
   rellenando: boolean = false;
   rellenaOk: number | null = null;
-  rellenaError: string | null = null; 
-  debugging: boolean = debug; 
+  rellenaError: string | null = null;
+  // estado para vaciar la tabla
+  emptying: boolean = false;
+  emptyOk: number | null = null;
+  emptyError: string | null = null;
+  // contador actual de elementos en la tabla
+  totalElementsCount: number = 0;
+  // track id being published/unpublished to show spinner per-row
+  publishingId: number | null = null;
+  publishingAction: 'publicar' | 'despublicar' | null = null;
+  debugging: boolean = debug;
 
-  constructor(private oPalomaresService: PalomaresService) {
-    this.debugging && console.log('RoutedAdminPlist - Constructor inicializado');
-  }
+  constructor(private oPalomaresService: PalomaresService, private dialog: MatDialog, private snackBar: MatSnackBar) { }
 
   oBotonera: string[] = [];
+  orderField: string = 'id';
+  orderDirection: string = 'asc';
 
   ngOnInit() {
     this.getPage();
   }
 
   getPage() {
-    this.debugging && console.log('Llamando a getPage - Página:', this.numPage, 'RPP:', this.numRpp);
-    this.oPalomaresService.getPage(this.numPage, this.numRpp).subscribe({
+    this.oPalomaresService.getPage(this.numPage, this.numRpp, this.orderField, this.orderDirection).subscribe({
       next: (data: IPage<IPalomares>) => {
-        this.debugging && console.log('✅ Datos recibidos del servidor:', data);
-        this.debugging && console.log('📊 Estructura de data:', {
-          content: data.content,
-          totalElements: data.totalElements,
-          totalPages: data.totalPages,
-          number: data.number
-        });
-        this.debugging && console.log('📝 Contenido del array:', data.content);
-        this.debugging && console.log('📏 Longitud del array content:', data.content?.length);
-        
         this.oPage = data;
-        this.rellenaOk = this.oPage.totalElements;
-        
+        // actualizar contador actual
+        this.totalElementsCount = data.totalElements ?? 0;
+        this.rellenaOk = this.totalElementsCount;
         // si estamos en una página que supera el límite entonces nos situamos en la ultima disponible
         if (this.numPage > 0 && this.numPage >= data.totalPages) {
           this.numPage = data.totalPages - 1;
@@ -59,12 +61,21 @@ export class RoutedAdminPlist {
         }
       },
       error: (error: HttpErrorResponse) => {
-        this.debugging && console.error('❌ Error al cargar datos:', error);
-        this.debugging && console.error('Status:', error.status);
-        this.debugging && console.error('Message:', error.message);
-        this.debugging && console.error('Error completo:', error);
+        this.debugging && console.error(error);
       },
     });
+  }
+
+  onOrder(order: string) {
+    if (this.orderField === order) {
+      this.orderDirection = this.orderDirection === 'asc' ? 'desc' : 'asc';
+    } else {
+      this.orderField = order;
+      this.orderDirection = 'asc';
+    }
+    this.numPage = 0;
+    this.getPage();
+    return false;
   }
 
   goToPage(numPage: number) {
@@ -88,17 +99,97 @@ export class RoutedAdminPlist {
     this.rellenaOk = null;
     this.rellenaError = null;
     this.rellenando = true;
+    // notificar inicio con el conteo actual
+    this.snackBar.open(`Generando ${this.rellenaCantidad} tareas... (actual: ${this.totalElementsCount})`, 'Cerrar', { duration: 3000 });
     this.oPalomaresService.rellenaPalomares(this.rellenaCantidad).subscribe({
       next: (count: number) => {
         this.rellenando = false;
         this.rellenaOk = count;
-        this.getPage(); // refrescamos listado
+        // refrescamos listado y notificamos resultado
+        this.getPage();
+        this.snackBar.open(`Generadas ${count} tareas. Total ahora: ${this.totalElementsCount + count}`, 'Cerrar', { duration: 4000 });
       },
       error: (err: HttpErrorResponse) => {
         this.rellenando = false;
         this.rellenaError = 'Error generando datos fake';
         this.debugging && console.error(err);
+        this.snackBar.open('Error generando datos de prueba', 'Cerrar', { duration: 4000 });
       }
     });
+  }
+
+  openEmptyConfirm() {
+    const dialogRef = this.dialog.open(ConfirmDialogComponent, {
+      data: {
+        title: 'Vaciar tabla de Tareas',
+        message: '¿Está seguro de que desea borrar TODAS las tareas? Esta acción es irreversible.'
+      }
+    });
+
+    dialogRef.afterClosed().subscribe((result: boolean) => {
+      if (result) {
+        this.doEmpty();
+      }
+    });
+  }
+
+  private doEmpty() {
+    this.emptying = true;
+    this.emptyOk = null;
+    this.emptyError = null;
+    // notificar inicio con el conteo actual
+    this.snackBar.open(`Vaciando tabla... (actual: ${this.totalElementsCount})`, 'Cerrar', { duration: 3000 });
+    this.oPalomaresService.empty().subscribe({
+      next: (count: number) => {
+        this.emptying = false;
+        this.emptyOk = count;
+        // refrescar listado
+        this.numPage = 0;
+        this.getPage();
+        this.snackBar.open(`Tabla vaciada. Eliminados: ${count}. Total ahora: 0`, 'Cerrar', { duration: 4000 });
+      },
+      error: (err: HttpErrorResponse) => {
+        this.emptying = false;
+        this.emptyError = 'Error vaciando la tabla';
+        this.debugging && console.error(err);
+        this.snackBar.open('Error al vaciar la tabla', 'Cerrar', { duration: 4000 });
+      }
+    });
+  }
+
+  publicar(id: number) {
+    this.publishingId = id;
+    this.publishingAction = 'publicar';
+    this.oPalomaresService.publicar(id).subscribe({
+      next: () => {
+        this.publishingId = null;
+        this.publishingAction = null;
+        this.getPage();
+      },
+      error: (err: HttpErrorResponse) => {
+        this.debugging && console.error(err);
+        this.publishingId = null;
+        this.publishingAction = null;
+      }
+    });
+    return false;
+  }
+
+  despublicar(id: number) {
+    this.publishingId = id;
+    this.publishingAction = 'despublicar';
+    this.oPalomaresService.despublicar(id).subscribe({
+      next: () => {
+        this.publishingId = null;
+        this.publishingAction = null;
+        this.getPage();
+      },
+      error: (err: HttpErrorResponse) => {
+        this.debugging && console.error(err);
+        this.publishingId = null;
+        this.publishingAction = null;
+      }
+    });
+    return false;
   }
 }

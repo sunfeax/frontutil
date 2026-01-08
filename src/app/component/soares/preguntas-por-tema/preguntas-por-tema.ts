@@ -1,12 +1,12 @@
 // Componente que muestra las preguntas agrupadas por tema y permite expandir cada grupo para ver las preguntas
 // Agrupa las preguntas por tema usando palabras clave
 import { Component, OnInit, computed, signal } from '@angular/core';
-import { ISoares } from '../../../model/soares';
+import { ISoares } from '../../../model/soares/soares';
 import { SoaresService } from '../../../service/soares';
 import { CommonModule } from '@angular/common';
 
 @Component({
-  selector: 'app-preguntas-por-tema',
+  selector: 'app-soares-preguntas-por-tema',
   templateUrl: './preguntas-por-tema.html',
   styleUrl: './preguntas-por-tema.css',
   standalone: true,

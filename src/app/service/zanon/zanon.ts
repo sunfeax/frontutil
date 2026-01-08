@@ -14,7 +14,7 @@ export class ZanonService {
 
     }
 
-    getPage(page: number, rpp: number, order: string = '', direction: string = ''): Observable<IPage<IZanon>> {
+    getPage(page: number, rpp: number, order: string = '', direction: string = '', publico?: boolean): Observable<IPage<IZanon>> {
         if (order === '') {
             order = 'id';
         }
@@ -23,7 +23,13 @@ export class ZanonService {
             direction = 'asc';
         }
 
-        return this.oHttp.get<IPage<IZanon>>(serverURL + `/zanon?page=${page}&size=${rpp}&sort=${order},${direction}`);
+        let url = `${serverURL}/zanon?page=${page}&size=${rpp}&sort=${order},${direction}`;
+
+        if (publico !== undefined) {
+            url += `&publico=${publico}`;
+        }
+
+        return this.oHttp.get<IPage<IZanon>>(url);
     }
 
     get(id: number): Observable<IZanon> {
@@ -44,5 +50,24 @@ export class ZanonService {
 
     rellenaBlog(numPosts: number): Observable<number> {
         return this.oHttp.get<number>(serverURL + '/zanon/rellena/' + numPosts);
+    }
+
+    /**
+   * 
+   * Vaciar la tabla (DELETE /zanon/empty).
+   * Devuelve el número de filas eliminadas
+   * 
+   */
+
+    empty(): Observable<number> {
+        return this.oHttp.delete<number>(serverURL + '/zanon/empty');
+    }
+
+    publicar(id: number): Observable<number> {
+        return this.oHttp.put<number>(serverURL + '/zanon/publicar/' + id, {});
+    }
+
+    despublicar(id: number): Observable<number> {
+        return this.oHttp.put<number>(serverURL + '/zanon/despublicar/' + id, {});
     }
 }

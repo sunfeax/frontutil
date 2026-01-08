@@ -8,6 +8,7 @@ import { AlfonsoRespuestaService } from '../../../service/alfonso-respuesta';
 import { Paginacion } from "../../shared/paginacion/paginacion";
 import { BotoneraRpp } from "../../shared/botonera-rpp/botonera-rpp";
 import { DatetimePipe } from "../../../pipe/datetime-pipe";
+import { Subject, debounceTime } from 'rxjs';
 
 @Component({
   selector: 'app-alfonso-admin-plist',
@@ -25,15 +26,33 @@ export class RoutedAlfonsoAdminPlist {
   rellenando: boolean = false;
   rellenaOk: number | null = null;
   rellenaError: string | null = null;
+  emptying: boolean = false;
+  statusMsg: string | null = null;
+  filter: string = '';
+  totalRegistros: number | null = null;
+  private filterSubject = new Subject<string>();
 
   constructor(private oService: AlfonsoRespuestaService) { }
 
   ngOnInit() {
+    this.filterSubject.pipe(debounceTime(400)).subscribe({
+      next: (value) => {
+        this.filter = value;
+        this.applyFilter();
+      }
+    });
+    this.loadTotals();
     this.getPage();
   }
 
+  loadTotals() {
+    this.oService.count().subscribe({
+      next: (total) => this.totalRegistros = total,
+    });
+  }
+
   getPage() {
-    this.oService.getPage(this.numPage, this.numRpp, this.order, this.direction).subscribe({
+    this.oService.getPage(this.numPage, this.numRpp, this.order, this.direction, this.filter).subscribe({
       next: (data: IPage<IAlfonsoRespuesta>) => {
         this.oPage = data;
         if (this.numPage > 0 && this.numPage >= data.totalPages) {
@@ -75,6 +94,16 @@ export class RoutedAlfonsoAdminPlist {
     return false;
   }
 
+  onFilterChange(value: string) {
+    this.filterSubject.next(value);
+  }
+
+  applyFilter() {
+    this.numPage = 0;
+    this.getPage();
+    return false;
+  }
+
   generarFake() {
     this.rellenaOk = null;
     this.rellenaError = null;
@@ -89,6 +118,43 @@ export class RoutedAlfonsoAdminPlist {
         this.rellenando = false;
         this.rellenaError = 'Error generando datos fake';
         console.error(err);
+      }
+    });
+  }
+
+  togglePublicado(item: IAlfonsoRespuesta) {
+    this.statusMsg = null;
+    const obs = item.publicado ? this.oService.despublicar(item.id) : this.oService.publicar(item.id);
+    obs.subscribe({
+      next: () => {
+        this.statusMsg = 'Estado actualizado';
+        this.getPage();
+      },
+      error: (err: HttpErrorResponse) => {
+        console.error(err);
+        this.statusMsg = 'No se pudo cambiar el estado';
+      }
+    });
+  }
+
+  emptyTable() {
+    if (this.emptying) return;
+    if (!confirm('Vaciar todas las respuestas? Esta acción es irreversible')) {
+      return;
+    }
+    this.emptying = true;
+    this.statusMsg = null;
+    this.oService.empty().subscribe({
+      next: (count: number) => {
+        this.emptying = false;
+        this.statusMsg = `Tabla vaciada (${count} registros)`;
+        this.numPage = 0;
+        this.getPage();
+      },
+      error: (err: HttpErrorResponse) => {
+        console.error(err);
+        this.emptying = false;
+        this.statusMsg = 'No se pudo vaciar la tabla';
       }
     });
   }

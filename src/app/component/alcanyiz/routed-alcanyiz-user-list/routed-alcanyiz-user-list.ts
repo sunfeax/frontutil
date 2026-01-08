@@ -6,17 +6,19 @@ import { IPage } from '../../../model/plist';
 import { jsQuestionService } from '../../../service/alcanyiz/jsquestions';
 import { Paginacion } from "../../shared/paginacion/paginacion";
 import { UnroutedAlcanyizUserView2 } from '../unrouted-alcanyiz-user-view2/unrouted-alcanyiz-user-view2';
+import { RouterLink } from '@angular/router';
 
 @Component({
   selector: 'app-routed-alcanyiz-user-list',
-  imports: [CommonModule, Paginacion, UnroutedAlcanyizUserView2],
+  imports: [CommonModule, Paginacion, UnroutedAlcanyizUserView2, RouterLink],
   templateUrl: './routed-alcanyiz-user-list.html',
   styleUrl: './routed-alcanyiz-user-list.css',
 })
 export class RoutedAlcanyizUserList {
 oPage: IPage<questionModel> | null = null;
   numPage: number = 0;
-  numRpp: number = 2;
+  numRpp: number = 3;
+  totalElementsCount: number = 0;
 
   constructor(private oQuestionService: jsQuestionService) { }
 
@@ -27,11 +29,10 @@ oPage: IPage<questionModel> | null = null;
   }
 
   getPage() {
-  // request ordered by id ascending (simple and compatible with backend)
   this.oQuestionService.getPage(this.numPage, this.numRpp, 'id', 'asc').subscribe({
       next: (data: IPage<questionModel>) => {
         this.oPage = data;
-        // OJO! si estamos en una página que supera el límite entonces nos situamos en la ultima disponible
+        this.totalElementsCount = data.totalElements ?? 0;
         if (this.numPage > 0 && this.numPage >= data.totalPages) {
           this.numPage = data.totalPages - 1;
           this.getPage();

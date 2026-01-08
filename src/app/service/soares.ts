@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { serverURL } from '../environment/environment';
 import { IPage } from '../model/plist';
-import { ISoares } from '../model/soares';
+import { ISoares } from '../model/soares/soares';
 import { Observable } from 'rxjs';
 import { HttpClient } from '@angular/common/http';
 
@@ -14,19 +14,22 @@ export class SoaresService {
 
   constructor(private oHttp: HttpClient) { }
 
-  getPageAdmin(page: number, rpp: number, order: string = '', direction: string = '', filter: string = '', soloPendientes: boolean = false): Observable<IPage<ISoares>> {
+  getPageAdmin(page: number, rpp: number, order: string = '', direction: string = '', filter: string = '', soloPendientes: boolean = false, soloPublicadas: boolean = false): Observable<IPage<ISoares>> {
     if (order === '') {
       order = 'id';
     }
     if (direction === '') {
       direction = 'asc';
     }
-    let sUrl: string = this.sUrl + '/admin' + '?page=' + (page - 1) + '&size=' + rpp + '&sort=' + order + ',' + direction;
+    let sUrl: string = this.sUrl + '/admin' + '?page=' + page + '&size=' + rpp + '&sort=' + order + ',' + direction;
     if (filter) {
       sUrl += '&filter=' + filter;
     }
     if (soloPendientes) {
       sUrl += '&soloPendientes=true';
+    }
+    if (soloPublicadas) {
+      sUrl += '&soloPublicadas=true';
     }
     return this.oHttp.get<IPage<ISoares>>(sUrl);
   }
@@ -38,7 +41,7 @@ export class SoaresService {
     if (direction === '') {
       direction = 'asc';
     }
-    let sUrl: string = this.sUrl + '/user' + '?page=' + (page - 1) + '&size=' + rpp + '&sort=' + order + ',' + direction;
+    let sUrl: string = this.sUrl + '/user' + '?page=' + page + '&size=' + rpp + '&sort=' + order + ',' + direction;
     if (filter) {
       sUrl += '&filter=' + filter;
     }
@@ -67,5 +70,10 @@ export class SoaresService {
 
   empty(): Observable<number> {
     return this.oHttp.delete<number>(this.sUrl + '/empty');
+  }
+
+  checkPreguntaExists(pregunta: string, excludeId?: number): Observable<boolean> {
+    const params = excludeId ? `?excludeId=${excludeId}` : '';
+    return this.oHttp.post<boolean>(this.sUrl + '/check-exists' + params, { pregunta });
   }
 }

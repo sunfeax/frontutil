@@ -1,9 +1,10 @@
 import { Component, Input } from '@angular/core';
 import { IAlcalde } from '../../../model/alcalde';
+import { DatetimePipe } from '../../../pipe/datetime-pipe';
 
 @Component({
   selector: 'app-alcalde-admin-view',
-  imports: [],
+  imports: [DatetimePipe],
   templateUrl: './unrouted-admin-view.html',
   styleUrl: './unrouted-admin-view.css',
 })
