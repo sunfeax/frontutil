@@ -43,3 +43,34 @@
   max-width: 560px;
   width: 100%;
 }
+
+@media (max-width: 768px) {
+  .mobile-stack thead {
+    display: none;
+  }
+
+  .mobile-stack {
+    border-collapse: separate;
+    border-spacing: 0;
+    width: 100%;
+  }
+
+  .mobile-stack colgroup,
+  .mobile-stack col {
+    display: none;
+  }
+}
+
+@media (min-width: 769px) {
+  .mobile-stack {
+    table-layout: fixed;
+  }
+
+  .mobile-stack .comment-col {
+    max-width: 340px;
+    width: 34ch;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+}

@@ -62,7 +62,7 @@ export class UskiAdminRemovePage implements OnInit {
     this.visitasService.delete(this.oVisita.id).subscribe({
       next: () => {
         this.deleting = false;
-        this.snackBar.open('Registro borrado correctamente', 'Cerrar', { duration: 3000 });
+        this.snackBar.open('Registro borrado correctamente', 'Cerrar', { duration: 4000 });
         this.router.navigate(['/visitas/dashboard']);
       },
       error: (err: HttpErrorResponse) => {
