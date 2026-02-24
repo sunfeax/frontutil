@@ -8,6 +8,7 @@ import { Router, RouterLink } from '@angular/router';
 import { debug } from '../../../environment/environment';
 import { SessionService } from '../../../service/session.service';
 import { IToken } from '../../../model/token';
+import { finalize } from 'rxjs/operators';
 
 @Component({
   selector: 'app-login.component',
@@ -47,29 +48,32 @@ export class LoginComponent implements OnInit {
       return;
     }
 
+    this.error = null;
     this.submitting = true;
 
-    this.loginService.sha256(this.loginForm.value.password).then((hash) => {
-      this.debugging && console.log('SHA256:', hash);
-      const payload: Partial<LoginType> = {
-        username: this.loginForm.value.username,
-        password: hash,
-      };
+    const payload: Partial<LoginType> = {
+      username: this.loginForm.value.username,
+      password: this.loginForm.value.password,
+    };
 
-      this.loginService.create(payload).subscribe({
-        next: (data: IToken) => {
-          // aqui hay que guardarse el token
-          this.oSessionService.setToken(data.token);
-          this.submitting = true;
-          this.debugging && console.log('Login successful, token: ', data);
-          this.router.navigate(['']);
-        },
-        error: (err: HttpErrorResponse) => {
-          this.submitting = false;
-          this.error = 'Error al login';
-          this.debugging && console.error(err);
-        },
-      });
+    this.loginService.create(payload).pipe(
+      finalize(() => this.submitting = false)
+    ).subscribe({
+      next: (data: IToken) => {
+        if (!data?.token) {
+          this.error = 'Usuario o contraseña incorrectos';
+          return;
+        }
+
+        // aqui hay que guardarse el token
+        this.oSessionService.setToken(data.token);
+        this.debugging && console.log('Login successful, token: ', data);
+        this.router.navigate(['']);
+      },
+      error: (err: HttpErrorResponse) => {
+        this.error = err.status === 401 ? 'Usuario o contraseña incorrectos' : 'Error al login';
+        this.debugging && console.error(err);
+      },
     });
   }
 
